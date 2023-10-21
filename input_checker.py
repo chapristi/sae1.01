@@ -12,6 +12,8 @@ def isDigit(input : str) -> bool:
     isDigit : bool
     i : int
 
+    if input == "":
+        return False
     numbers = "0123456789"
     isDigit = True
     i  = 0 

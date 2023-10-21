@@ -13,7 +13,7 @@ def gameMatchInit(gameMatch : GameMatch)->None:
         Returns:
             Rien
    """
-   gameMatch.numberOfMatches = 15
+   gameMatch.numberOfMatches = 20
    gameMatch.pointWin = 15
    gameMatch.pointLoose = 1
    gameMatch.isOver = False
