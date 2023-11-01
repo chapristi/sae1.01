@@ -2,15 +2,30 @@
 from game_match import GameMatch, gameMatchInit
 from colors import set_color_green,set_color_red,set_color_yellow
 from input_checker import isDigit
+from sqlite3 import Connection
+from player import *
+from sql_commands import addPoint
+from helperPlayer import getOtherPlayer
 
-def display_win() -> None:
-    print(set_color_green("bravo le joueur x a gagner 100 points en revanche le joueur y gagne 0 points "))
-
-def display_starting_menu() -> None:
+def displayStartingMenu() -> None:
     print(set_color_green("Bienvenue sur le jeu des Allumettes etes vous pret a jouer?"))
     print(set_color_green("Chargement..."))
-   
-def draw_matches(nb : int) -> None:
+
+def displayWin(winner : Player, currentPLayers: CurrentPlayers,gameMatch : GameMatch) -> None:
+    looser : Player
+
+    looser = getOtherPlayer(currentPLayers,winner)
+    print(set_color_green("Bravo c'est ("+  winner.name + ") qui l'emporte et gagne "+ str(gameMatch.pointWin)+" points"))
+    print(set_color_yellow("Dommage c'est (" + looser.name + ") qui a perdu mais remporte "+ str(gameMatch.pointWin)+" points"))
+
+def pointsRepartition(gameMatch : GameMatch,conn :Connection,currentPlayers:CurrentPlayers,winner:Player):
+    looser : Player
+
+    looser = getOtherPlayer(currentPlayers,winner)
+    addPoint(winner.id,gameMatch.pointWin,conn,gameMatch.colName)
+    addPoint(looser.id,gameMatch.pointLoose,conn,gameMatch.colName)
+  
+def drawMatches(nb : int) -> None:
     matches : list[str]
     i: int
 
@@ -28,22 +43,24 @@ def draw_matches(nb : int) -> None:
             print(matches[i] + " ",end="")
     print()
 
-def game() -> None:
+
+    
+def game(currentPlayers : CurrentPlayers, conn : Connection) -> None:
     """
         currentPLayers : CurrentPlayers
     """
     gameMatch : GameMatch
-    curr_player : bool
+    currPlayer : Player
     choice  : str
 
-    curr_player = True
+    currPlayer = currentPlayers.player1
     gameMatch = GameMatch()
     gameMatchInit(gameMatch)
-    display_starting_menu()
+    displayStartingMenu()
 
     while gameMatch.numberOfMatches > 0:
-        draw_matches(gameMatch.numberOfMatches)
-        print(set_color_green(str(curr_player)), "à vous de jouer")
+        drawMatches(gameMatch.numberOfMatches)
+        print(set_color_green(currPlayer.name), "à vous de jouer")
         choice = input("choisissez entre " + set_color_yellow("1,2 ou 3") +" allumettes à retirer ")
         
         while not isDigit(choice) or int(choice) < 1 or int(choice) > 3:
@@ -51,11 +68,11 @@ def game() -> None:
                 set_color_yellow("⚠️ choisissez entre 1,2 ou 3 allumettes à retirer")
             )
         gameMatch.numberOfMatches -= int(choice)
-        if gameMatch.numberOfMatches > 0:
-            curr_player = not curr_player
+        currPlayer = getOtherPlayer(currentPlayers,currPlayer)
 
-    display_win()
+    displayWin(currPlayer,currentPlayers,gameMatch)
+    pointsRepartition(gameMatch,conn,currentPlayers,currPlayer)
               
-game()  
+
 
 

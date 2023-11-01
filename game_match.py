@@ -1,4 +1,5 @@
 class GameMatch:
+    colName : str
     pointWin : int
     pointLoose : int
     numberOfMatches : int
@@ -13,7 +14,8 @@ def gameMatchInit(gameMatch : GameMatch)->None:
         Returns:
             Rien
    """
+   gameMatch.colName = "scoreMatches"
    gameMatch.numberOfMatches = 20
    gameMatch.pointWin = 15
-   gameMatch.pointLoose = 1
+   gameMatch.pointLoose = 2
    gameMatch.isOver = False

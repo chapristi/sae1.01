@@ -1,6 +1,7 @@
 class Player:
     id : int
     name : str
+    playerNumber : int
     scoreRiddle: int
     scoreTtt : int
     scoreMatches : int
@@ -21,9 +22,5 @@ class CurrentPlayers:
 def currentPlayersInit(curentPlayers : CurrentPlayers, player1 : Player, player2 : Player):
     curentPlayers.player1 = player1
     curentPlayers.player2 = player2
-
-
-
-
-class Players:
-    tabPlayers: list[Player]
+    curentPlayers.player1.playerNumber = 2
+    curentPlayers.player2.playerNumber = 3
