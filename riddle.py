@@ -1,16 +1,26 @@
-from game_riddle import *
-from player import *
-from input_checker import isDigit
+from entity.game_riddle import *
+from entity.player import *
+from utils.input_checker import isDigit
 from sqlite3 import Connection
-#import sqlite3
-from colors import *
-from sql_commands import addPoint
+from utils.colors import *
+from dataServices.sql_commands import addPoint
 from helperPlayer import getOtherPlayer
 
 def display_result(gameRiddle : GameRiddle, looser: Player, winner: Player):
     """
-        affiche le joueur gagnant et le nombre de points remportes par chacun
+        Affiche les résultats d'une partie.
+
+        Cette fonction affiche le résultat d'une partie en donnant des informations sur le gagnant et le perdant, ainsi que le nombre de points gagnés et perdus.
+
+        Args:
+            gameRiddle (GameRiddle): L'instance de la classe GameRiddle correspondant à la partie.
+            looser (Player): L'instance de la classe Player correspondant au perdant.
+            winner (Player): L'instance de la classe Player correspondant au gagnant.
+
+        Returns:
+            None
     """
+     
     print(set_color_green("\nBravo (" + winner.name + ") vous avez gagné , vous recevez " + str(gameRiddle.pointWin) + " points"))
     print(set_color_yellow("Merci de votre participation (" + looser.name + "), vous recevez " + str(gameRiddle.pointLoose) + " points"))
 
@@ -30,11 +40,11 @@ def guess_number(gameRiddle : GameRiddle, information : str, choice : int) -> bo
     isLiar : bool
 
     isLiar = True
-    if choice > gameRiddle.numberToGuess and information == "moins":
+    if choice > gameRiddle.numberToGuess and information == "trop grand":
         isLiar = False
-    elif choice < gameRiddle.numberToGuess and information == "plus":
+    elif choice < gameRiddle.numberToGuess and information == "trop petit":
         isLiar = False
-    elif choice == gameRiddle.numberToGuess and information == "egal":
+    elif choice == gameRiddle.numberToGuess and information == "c'est gagné":
         isLiar = False
     return isLiar
 
@@ -72,12 +82,12 @@ def game(currentPlayers: CurrentPlayers, conn : Connection):
     gameRiddleInit(gameRiddle,currentPlayers)
     while not gameRiddle.isOver:
         gameRiddle.attempts += 1
-        choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" essayez de trouver le nombre")
+        choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
         while not isDigit(choice):
-            choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" essayez de trouver le nombre")
-        information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+ " entrez plus,moins ou egal en fonction du nombre entree")
+            choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
+        information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         while guess_number(gameRiddle,information,int(choice)):
-            information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+" ne mentez pas! entrez plus, moins ou egal en fonction du nombre entree")
+            information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         if int(choice) == gameRiddle.numberToGuess:
             winner = currentPlayers.player2
             gameRiddle.isOver = True

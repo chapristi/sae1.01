@@ -1,16 +1,43 @@
-from gameP4 import GameP4,gameP4Init
-from player import CurrentPlayers,Player
-from colors import *
-from input_checker import isDigit
-from sql_commands import addPoint
+from entity.gameP4 import GameP4,gameP4Init
+from entity.player import CurrentPlayers,Player
+from utils.colors import *
+from utils.input_checker import isDigit
+from dataServices.sql_commands import addPoint
 from sqlite3 import Connection
 from helperPlayer import getOtherPlayer
 
 def displayStartingMenu():
+    """
+        Affiche le menu de démarrage du jeu Puissance 4.
+
+        Cette fonction affiche le menu de démarrage du jeu Puissance 4, y compris un message de bienvenue, les règles du jeu et un message de chargement.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+    """
+
     print(set_color_green("Bienvenue à vous dans le jeu du puissance 4"))
+    print (set_color_green("REGLES DU JEU \n 1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille. \n 2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. \n 3. Le premier joueur à aligner 4 de ses pions a gagné !"))
     print(set_color_green("Chargement..."))
 
 def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
+    """
+        Vérifie si le joueur actuel a gagné dans le Puissance 4.
+
+        Cette fonction vérifie si le joueur actuel a gagné dans le jeu Puissance 4 en recherchant des alignements de 4 de ses pions horizontalement, verticalement ou en diagonale.
+
+        Args:
+            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
+            currentPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+
+        Returns:
+            bool: True si le joueur actuel a gagné, False sinon.
+
+    """
     i : int
     j : int
     isWin : bool
@@ -56,6 +83,21 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
 
 
 def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection):
+    """
+        Gère la distribution des points à la fin de la partie de Puissance 4.
+
+        Cette fonction détermine le gagnant de la partie et distribue les points en conséquence. Elle affiche également un message indiquant le résultat de la partie.
+
+        Args:
+            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
+            curPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+            curPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
+            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
+
+        Returns:
+            None
+
+    """
     if checkWin(gameP4,curPlayer):
         print(set_color_green("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
         addPoint(curPlayer.id,gameP4.pointWin,conn,gameP4.colName)
@@ -84,6 +126,19 @@ def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
     return isDraw
 
 def play(gameP4 : GameP4, column :int, number : int)->bool:
+    """
+        Vérifie s'il y a égalité dans la partie de Puissance 4.
+
+        Cette fonction vérifie s'il y a égalité (match nul) dans la partie de Puissance 4. Il y a égalité si la grille est remplie et qu'aucun joueur n'a gagné.
+
+        Args:
+            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
+            currPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+
+        Returns:
+            bool: True s'il y a égalité, False sinon.
+
+    """
     i : int
     canPlay : bool
 
@@ -98,6 +153,19 @@ def play(gameP4 : GameP4, column :int, number : int)->bool:
      
     
 def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
+    """
+        Affiche la grille de jeu du Puissance 4.
+
+        Cette fonction affiche la grille de jeu du Puissance 4, avec les pions des joueurs. Les colonnes et lignes sont numérotées, et les pions des joueurs sont affichés en couleur.
+
+        Args:
+            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
+            currentPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
+
+        Returns:
+            None
+
+    """
     i : int
     j : int
 
@@ -122,6 +190,19 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
 
 
 def game(currentPlayers : CurrentPlayers, conn : Connection):
+    """
+        Gère le déroulement d'une partie de Puissance 4.
+
+        Cette fonction gère le déroulement d'une partie de Puissance 4, y compris l'affichage de la grille, les tours des joueurs, la vérification de la victoire ou de l'égalité, et la distribution des points à la fin de la partie.
+
+        Args:
+            currentPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
+            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
+
+        Returns:
+            None
+
+    """
     gameP4 : GameP4
     finished : bool
     currentPlayer : Player

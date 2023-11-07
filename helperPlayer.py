@@ -1,4 +1,4 @@
-from player import CurrentPlayers,Player
+from entity.player import CurrentPlayers,Player
 
 def changePlayer(currPlayers: CurrentPlayers):
     """
@@ -22,6 +22,19 @@ def changePlayer(currPlayers: CurrentPlayers):
     currPlayers.player2.playerNumber = tmpValue
 
 def getOtherPlayer(currentPlayers: CurrentPlayers, currentPlayer : Player)->Player:
+    """
+        Renvoie l'autre joueur parmi les deux joueurs actuels.
+
+        Cette fonction renvoie l'autre joueur parmi les deux joueurs actuels, en fonction du joueur passé en argument.
+
+        Args:
+            currentPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
+            currentPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+
+        Returns:
+            Player: L'autre joueur parmi les deux joueurs actuels.
+
+    """
     if currentPlayer == currentPlayers.player1:
         return currentPlayers.player2
     return currentPlayers.player1

@@ -1,4 +1,4 @@
-from colors import set_color_red,set_color_yellow
+from utils.colors import set_color_red,set_color_yellow
 class GameP4:
     colName : str
     pointWin : int
@@ -12,6 +12,19 @@ class GameP4:
 
 
 def gameP4Init(gameP4 : GameP4):
+    """
+        Initialise un objet GameP4 avec les paramètres spécifiques.
+
+        Cette fonction initialise un objet GameP4 avec des paramètres spécifiques pour le jeu Puissance 4, tels que le nom de la colonne pour enregistrer les scores, les symboles des joueurs, les points attribués en cas de victoire, égalité ou défaite, ainsi que la taille de la grille et l'état initial de la grille.
+
+        Args:
+            gameP4 (GameP4): L'objet GameP4 à initialiser.
+
+        Returns:
+            None
+
+    """
+
     gameP4.colName = "scoreP4"
     gameP4.player1Pawn = set_color_yellow("⬤")
     gameP4.player2Pawn = set_color_red("⬤")

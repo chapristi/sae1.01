@@ -1,17 +1,41 @@
 
-from colors import *
-from player import *
-from gameTicTacToe import *
+from utils.colors import *
+from entity.player import *
+from entity.gameTicTacToe import *
 from sqlite3 import Connection
-from input_checker import isDigit
+from utils.input_checker import isDigit
 from helperPlayer import getOtherPlayer
-from sql_commands import addPoint
+from dataServices.sql_commands import addPoint
 
 def displayStartingMenu():
+    """
+        Affiche le menu de démarrage du jeu du Morpion.
+
+        Cette fonction affiche un menu de démarrage du jeu du Morpion, y compris les règles du jeu et un message de chargement.
+
+        Args:
+            Aucun.
+
+        Returns:
+            None
+    """
     print(set_color_green("Bienvenue à vous dans le jeu du Morpion"))
+    print(set_color_green("REGLES DU JEU \n 1. À chaque joueur sera affecté une jeton \n 2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. \n 3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. \n 4. AA chaque joueur sera affecté une jeton"))
     print(set_color_green("Chargement..."))
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
+    """
+        Affiche le plateau de jeu du Morpion.
+
+        Cette fonction affiche le plateau de jeu du Morpion, y compris les positions des jetons des joueurs actuels.
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
+            currentPLayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les joueurs actuels.
+
+        Returns:
+            None
+    """
     i : int
     j : int
 
@@ -35,6 +59,18 @@ def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)-
     print("  +" + "---+"*gameTicTacToe.size_x)
 
 def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
+    """
+        Vérifie si le joueur actuel a remporté la partie.
+
+        Cette fonction vérifie si le joueur actuel a gagné la partie en vérifiant les lignes, les colonnes et les diagonales du plateau de jeu.
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
+            currentPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+
+        Returns:
+            bool: True si le joueur actuel a gagné, False sinon.
+    """
     i : int
     isWin : bool
     currentPlayerNumber : int
@@ -57,7 +93,20 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2]) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0])):
         isWin = True
     return isWin
+
+
 def checkDraw(gameTicTacToe : GameTicTacToe):
+    """
+        Vérifie si la partie est un match nul (matche null).
+
+        Cette fonction vérifie si la partie est un match nul en parcourant le plateau de jeu pour rechercher des cases vides.
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
+
+        Returns:
+            bool: True si la partie est un match nul, False sinon
+    """
     i : int
     j : int
     isDraw : bool
@@ -75,12 +124,41 @@ def checkDraw(gameTicTacToe : GameTicTacToe):
     return isDraw
 
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:
+    """
+        Joue un coup sur le plateau de jeu.
+
+        Cette fonction permet à un joueur de jouer un coup sur le plateau de jeu en plaçant son jeton à la position spécifiée.
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
+            currentPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+            choiceX (int): La coordonnée X de la position choisie par le joueur.
+            choiceY (int): La coordonnée Y de la position choisie par le joueur.
+
+        Returns:
+            bool: True si le coup a été joué avec succès (la case était vide), False sinon.
+
+    """
     if gameTicTacToe.plate[choiceY -1][choiceX -1] == 0:
         gameTicTacToe.plate[choiceY -1][choiceX -1] = currentPlayer.playerNumber
         return True
     return False
 
 def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection):
+    """
+        Distribue les points en fonction du résultat de la partie.
+
+        Cette fonction distribue les points aux joueurs en fonction du résultat de la partie (victoire ou match nul).
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
+            curPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+            curPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les joueurs actuels.
+            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
+
+        Returns:
+            None
+    """
     if checkWin(gameTicTacToe,curPlayer):
         print(set_color_green("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
         addPoint(curPlayer.id,gameTicTacToe.pointWin,conn,gameTicTacToe.colName)
@@ -94,6 +172,19 @@ def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlay
         addPoint(curPlayers.player2.id, gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
 
 def game(currentPlayers : CurrentPlayers, conn : Connection):
+    """
+        Déroule le jeu du Morpion entre deux joueurs.
+
+        Cette fonction gère le déroulement du jeu du Morpion entre deux joueurs. Elle initialise le plateau de jeu, affiche le menu de démarrage,
+        permet aux joueurs de jouer tour à tour, vérifie s'ils ont gagné ou si la partie est un match nul, puis distribue les points en conséquence.
+
+        Args:
+            currentPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
+            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
+
+        Returns:
+            None
+    """
     gameTicTacToe : GameTicTacToe
     finished : bool
     currentPlayer : Player

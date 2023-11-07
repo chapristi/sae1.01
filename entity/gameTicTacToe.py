@@ -11,6 +11,18 @@ class GameTicTacToe:
 
 
 def gameTicTacToeInit(gameTicTacToe : GameTicTacToe):
+    """
+        Initialise un objet GameTicTacToe avec les paramètres spécifiques.
+
+        Cette fonction initialise un objet GameTicTacToe avec des paramètres spécifiques pour le jeu Tic Tac Toe, tels que le nom de la colonne pour enregistrer les scores, les symboles des joueurs, les points attribués en cas de victoire, égalité ou défaite, ainsi que la taille de la grille et l'état initial de la grille.
+
+        Args:
+            gameTicTacToe (GameTicTacToe): L'objet GameTicTacToe à initialiser.
+
+        Returns:
+            None
+
+    """
     gameTicTacToe.colName = "scoreTtt"
     gameTicTacToe.player1Pawn = "X"
     gameTicTacToe.player2Pawn = "O"

@@ -1,14 +1,16 @@
 import sqlite3
-from player import CurrentPlayers,Player,currentPlayersInit
+from entity.player import CurrentPlayers,Player,currentPlayersInit
 from helperPlayer import changePlayer
-from sql_commands import connect,register
-from colors import *
-from input_checker import isDigit
+from dataServices.sql_commands import connect,register
+from utils.colors import *
+from utils.input_checker import isDigit
 from match import game as gameMatch
 from p4 import game as gameP4
 from riddle import game as gameRiddle
 from leaderBoard import displayLeaderBoards
 from ticTacToe import game as gameTicTacToe
+import getpass
+
 if __name__ == "__main__":
     currentPlayers : CurrentPlayers
     player1 : Player
@@ -37,7 +39,7 @@ if __name__ == "__main__":
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
             choice = input(set_color_yellow("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)")))
         username = input("username")
-        password = input("password")
+        password = getpass.getpass("password")
         if int(choice) == 0:
             player1 = connect(username,password, con)
             if player1.id == -1:
@@ -55,7 +57,7 @@ if __name__ == "__main__":
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
             choice = input(set_color_yellow("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)")))
         username = input("username")
-        password = input("password")
+        password = getpass.getpass("password")
         if int(choice) == 0 :
             player2 = connect(username,password, con)
             if player2.id == -1:
@@ -70,10 +72,8 @@ if __name__ == "__main__":
 
         else:
             print(set_color_red("ce choix n'existe pas"))
-
-
+            
     currentPlayersInit(currentPlayers, player1, player2)
-
     end = False
     while not end:
         print(set_color_green("\nYAA! choisisez le jeu:\n"))
@@ -99,3 +99,4 @@ if __name__ == "__main__":
             case _:
                 print(set_color_red("ce choix n'existe pas"))
         changePlayer(currentPlayers)
+    con.close()
