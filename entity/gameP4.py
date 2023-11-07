@@ -1,4 +1,4 @@
-from utils.colors import set_color_red,set_color_yellow
+from utils.colors import setColorRed,setColorYellow
 class GameP4:
     colName : str
     pointWin : int
@@ -26,8 +26,8 @@ def gameP4Init(gameP4 : GameP4):
     """
 
     gameP4.colName = "scoreP4"
-    gameP4.player1Pawn = set_color_yellow("⬤")
-    gameP4.player2Pawn = set_color_red("⬤")
+    gameP4.player1Pawn = setColorYellow("⬤")
+    gameP4.player2Pawn = setColorRed("⬤")
     gameP4.pointWin = 5
     gameP4.pointDraw = 2
     gameP4.pointLoose = 1

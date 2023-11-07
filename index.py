@@ -29,57 +29,57 @@ if __name__ == "__main__":
 
     con = sqlite3.connect("db.sqlite")
 
-    print(set_color_green("Bienvenue à vous! etes vous prets à jouer?"))
-    print(set_color_green("Chargement..."))
-    print(set_color_yellow("Je vois que vous n'etes pas connectés"))
+    print(setColorGreen("Bienvenue à vous! etes vous prets à jouer?"))
+    print(setColorGreen("Chargement..."))
+    print(setColorYellow("Je vois que vous n'etes pas connectés"))
 
     while player1.id == -1:
         print("Connectez-vous à votre compte joueur 1")
-        choice = input("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)"))
+        choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(set_color_yellow("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)")))
+            choice = input(setColorYellow("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
         username = input("username")
         password = getpass.getpass("password")
         if int(choice) == 0:
             player1 = connect(username,password, con)
             if player1.id == -1:
-                print(set_color_red("Mot de passe ou nom d'utilisateur invalide"))
+                print(setColorRed("Mot de passe ou nom d'utilisateur invalide"))
         elif int(choice) == 1:
             player1 = register(username,password,con)
             if player1.id == -1:
-                print(set_color_red("⚠️ Ce nom d'utilisateur est déjà utilisé"))
+                print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
         else:
-            print(set_color_red("ce choix n'existe pas"))
+            print(setColorRed("ce choix n'existe pas"))
 
     while player2.id == -1:
         print("Connectez-vous à votre compte joueur 2")
-        choice = input("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)"))
+        choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(set_color_yellow("vous souhaiter vous "+ set_color_green("connecter(0)") + " ou vous "+ set_color_green("inscrire(1)")))
+            choice = input(setColorYellow("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
         username = input("username")
         password = getpass.getpass("password")
         if int(choice) == 0 :
             player2 = connect(username,password, con)
             if player2.id == -1:
-                print(set_color_red("Mot de passe ou nom d'utilisateur invalide"))
+                print(setColorRed("Mot de passe ou nom d'utilisateur invalide"))
             elif player1.id == player2.id:
-                print(set_color_red("⚠️ Ce joueur est déjà connecté"))
+                print(setColorRed("⚠️ Ce joueur est déjà connecté"))
                 player2.id = -1
         elif int(choice) == 1:
             player2 = register(username,password,con)
             if player2.id == -1:
-                print(set_color_red("⚠️ Ce nom d'utilisateur est déjà utilisé"))
+                print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
 
         else:
-            print(set_color_red("ce choix n'existe pas"))
+            print(setColorRed("ce choix n'existe pas"))
             
     currentPlayersInit(currentPlayers, player1, player2)
     end = False
     while not end:
-        print(set_color_green("\nYAA! choisisez le jeu:\n"))
+        print(setColorGreen("\nYAA! choisisez le jeu:\n"))
         gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
         while not isDigit(gameChoice):
-            print(set_color_red("ce choix n'existe pas\n"))
+            print(setColorRed("ce choix n'existe pas\n"))
             gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
 
         match int(gameChoice):
@@ -94,9 +94,9 @@ if __name__ == "__main__":
             case 5 : 
                 displayLeaderBoards(con)
             case 6:
-                print(set_color_green("Merci d'avoir jouer à bientot"))
+                print(setColorGreen("Merci d'avoir jouer à bientot"))
                 end = True
             case _:
-                print(set_color_red("ce choix n'existe pas"))
+                print(setColorRed("ce choix n'existe pas"))
         changePlayer(currentPlayers)
     con.close()

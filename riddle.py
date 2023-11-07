@@ -21,8 +21,8 @@ def display_result(gameRiddle : GameRiddle, looser: Player, winner: Player):
             None
     """
      
-    print(set_color_green("\nBravo (" + winner.name + ") vous avez gagné , vous recevez " + str(gameRiddle.pointWin) + " points"))
-    print(set_color_yellow("Merci de votre participation (" + looser.name + "), vous recevez " + str(gameRiddle.pointLoose) + " points"))
+    print(setColorGreen("\nBravo (" + winner.name + ") vous avez gagné , vous recevez " + str(gameRiddle.pointWin) + " points"))
+    print(setColorYellow("Merci de votre participation (" + looser.name + "), vous recevez " + str(gameRiddle.pointLoose) + " points"))
 
 
 def guess_number(gameRiddle : GameRiddle, information : str, choice : int) -> bool:
@@ -92,12 +92,12 @@ def game(currentPlayers: CurrentPlayers, conn : Connection):
     gameRiddleInit(gameRiddle,currentPlayers)
     while not gameRiddle.isOver:
         gameRiddle.attempts += 1
-        choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
+        choice = input("(" + setColorGreen(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
         while not isDigit(choice):
-            choice = input("(" + set_color_green(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
-        information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
+            choice = input("(" + setColorGreen(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
+        information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         while guess_number(gameRiddle,information,int(choice)):
-            information = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
+            information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         if int(choice) == gameRiddle.numberToGuess:
             winner = currentPlayers.player2
             gameRiddle.isOver = True

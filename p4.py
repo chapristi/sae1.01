@@ -20,9 +20,9 @@ def displayStartingMenu():
 
     """
 
-    print(set_color_green("Bienvenue à vous dans le jeu du puissance 4"))
-    print (set_color_green("REGLES DU JEU \n 1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille. \n 2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. \n 3. Le premier joueur à aligner 4 de ses pions a gagné !"))
-    print(set_color_green("Chargement..."))
+    print(setColorGreen("Bienvenue à vous dans le jeu du puissance 4"))
+    print (setColorGreen("REGLES DU JEU \n 1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille. \n 2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. \n 3. Le premier joueur à aligner 4 de ses pions a gagné !"))
+    print(setColorGreen("Chargement..."))
 
 def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
     """
@@ -99,14 +99,14 @@ def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentP
 
     """
     if checkWin(gameP4,curPlayer):
-        print(set_color_green("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
+        print(setColorGreen("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
         addPoint(curPlayer.id,gameP4.pointWin,conn,gameP4.colName)
         if curPlayer.id == curPlayers.player1.id:
             addPoint(curPlayers.player2.id,gameP4.pointLoose,conn,gameP4.colName)
         else:
             addPoint(curPlayers.player1.id,gameP4.pointLoose,conn,gameP4.colName)
     else:
-        print(set_color_green("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameP4.pointDraw) + " points"))
+        print(setColorGreen("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameP4.pointDraw) + " points"))
         addPoint(curPlayers.player1.id,gameP4.pointDraw,conn,gameP4.colName)
         addPoint(curPlayers.player2.id, gameP4.pointDraw,conn,gameP4.colName)
 
@@ -185,20 +185,20 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
     j = 0
     print("  " ,end="")
     for i in range(0,gameP4.sizeX):
-        print(set_color_red(str(i+1)), end="    ")
+        print(setColorRed(str(i+1)), end="    ")
     print()
     for i in range(0,gameP4.sizeY):
-        print(set_color_blue("+") + set_color_blue("----+")*gameP4.sizeX)
-        print(set_color_blue("|"),end="")
+        print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
+        print(setColorBlue("|"),end="")
         for j in range(0,gameP4.sizeX):
             if gameP4.plate[i][j] == currentPLayers.player1.playerNumber:
-                print(f" {gameP4.player1Pawn}  "+set_color_blue("|"),end="")
+                print(f" {gameP4.player1Pawn}  "+setColorBlue("|"),end="")
             elif gameP4.plate[i][j] == currentPLayers.player2.playerNumber:
-                print(f" {gameP4.player2Pawn}  "+set_color_blue("|"),end="")
+                print(f" {gameP4.player2Pawn}  "+setColorBlue("|"),end="")
             else:
-                print(f"    "+set_color_blue("|"),end="")
+                print(f"    "+setColorBlue("|"),end="")
         print()
-    print(set_color_blue("+") + set_color_blue("----+")*gameP4.sizeX)
+    print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
 
 
 def game(currentPlayers : CurrentPlayers, conn : Connection):
@@ -228,12 +228,12 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
     displayGrid(gameP4,currentPlayers)
     currentPlayer = currentPlayers.player1
     while not finished:
-        print(set_color_green("("+currentPlayer.name + ")") + " à toi de jouer")
+        print(setColorGreen("("+currentPlayer.name + ")") + " à toi de jouer")
         choice = input("chosi la collonne ou tu souhaites deposer ton pion")
         while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8 :
-            choice = input(set_color_yellow("chosi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
+            choice = input(setColorYellow("chosi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
         if(not play(gameP4,int(choice),currentPlayer.playerNumber)):
-            print(set_color_red(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+            print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
             continue
         displayGrid(gameP4,currentPlayers)
         if checkWin(gameP4,currentPlayer) or checkDraw(gameP4,currentPlayer):

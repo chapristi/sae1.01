@@ -1,4 +1,4 @@
-def set_color_red(text : str) -> str:
+def setColorRed(text : str) -> str:
     """
         Applique la couleur rouge à un texte donné en utilisant des codes ANSI.
 
@@ -11,7 +11,7 @@ def set_color_red(text : str) -> str:
     """
     return "\u001b[31m" + text + "\u001b[0m"
 
-def set_color_blue(text: str) -> str:
+def setColorBlue(text: str) -> str:
     """
     Applique la couleur bleue à un texte donné en utilisant des codes ANSI.
 
@@ -23,7 +23,7 @@ def set_color_blue(text: str) -> str:
     """
     return "\u001b[34m" + text + "\u001b[0m"
 
-def set_color_green(text : str) -> str:
+def setColorGreen(text : str) -> str:
     """
         Applique la couleur verte à un texte donné en utilisant des codes ANSI.
 
@@ -36,7 +36,7 @@ def set_color_green(text : str) -> str:
     """
     return "\u001b[32m" + text + "\u001b[0m"
 
-def set_color_yellow(text : str)->str:
+def setColorYellow(text : str)->str:
     """
         Applique la couleur jaune à un texte donné en utilisant des codes ANSI.
 

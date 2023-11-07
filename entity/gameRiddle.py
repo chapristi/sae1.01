@@ -1,6 +1,6 @@
 from utils.inputChecker import isDigit
 from entity.player import CurrentPlayers
-from utils.colors import set_color_green,set_color_yellow
+from utils.colors import setColorGreen,setColorYellow
 import getpass
 
 class GameRiddle:
@@ -30,12 +30,12 @@ def gameRiddleInit(gameRiddle : GameRiddle, currentPlayers : CurrentPlayers)->No
     gameRiddle.colName = "scoreRiddle"
     gameRiddle.isOver = False
     gameRiddle.attempts = 0
-    numberToGuess = getpass.getpass("(" + set_color_green(currentPlayers.player1.name)+ ")"+ " Entrez le nombre à deviner entre 0 et 200")
+    numberToGuess = getpass.getpass("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez le nombre à deviner entre 0 et 200")
     while not isDigit(numberToGuess) or int(numberToGuess) <  0 or int(numberToGuess) > 200:
-        numberToGuess = getpass.getpass("(" + set_color_green(currentPlayers.player1.name)+ ")"+ set_color_yellow("Entrez le nombre à deviner entre 0 et 200"))
-    maxAttempts = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+ " Entrez le nombre de tentative qu'aura le joueur >1 ")
+        numberToGuess = getpass.getpass("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ setColorYellow("Entrez le nombre à deviner entre 0 et 200"))
+    maxAttempts = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez le nombre de tentative qu'aura le joueur >1 ")
     while not isDigit(maxAttempts) or int(maxAttempts) < 1:
-        maxAttempts = input("(" + set_color_green(currentPlayers.player1.name)+ ")"+ set_color_yellow(" ⚠️Entrez le nombre de tentative qu'aura le joueur >1 "))
+        maxAttempts = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ setColorYellow(" ⚠️Entrez le nombre de tentative qu'aura le joueur >1 "))
         
     gameRiddle.maxAttempts = int(maxAttempts)
     gameRiddle.numberToGuess = int(numberToGuess)

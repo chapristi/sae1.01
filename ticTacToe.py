@@ -19,9 +19,9 @@ def displayStartingMenu():
         Returns:
             None
     """
-    print(set_color_green("Bienvenue à vous dans le jeu du Morpion"))
-    print(set_color_green("REGLES DU JEU \n 1. À chaque joueur sera affecté une jeton \n 2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. \n 3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. \n 4. AA chaque joueur sera affecté une jeton"))
-    print(set_color_green("Chargement..."))
+    print(setColorGreen("Bienvenue à vous dans le jeu du Morpion"))
+    print(setColorGreen("REGLES DU JEU \n 1. À chaque joueur sera affecté une jeton \n 2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. \n 3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. \n 4. AA chaque joueur sera affecté une jeton"))
+    print(setColorGreen("Chargement..."))
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -160,14 +160,14 @@ def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlay
             None
     """
     if checkWin(gameTicTacToe,curPlayer):
-        print(set_color_green("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
+        print(setColorGreen("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
         addPoint(curPlayer.id,gameTicTacToe.pointWin,conn,gameTicTacToe.colName)
         if curPlayer.id == curPlayers.player1.id:
             addPoint(curPlayers.player2.id,gameTicTacToe.pointLoose,conn,gameTicTacToe.colName)
         else:
             addPoint(curPlayers.player1.id,gameTicTacToe.pointLoose,conn,gameTicTacToe.colName)
     else:
-        print(set_color_green("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameTicTacToe.pointDraw) + " points"))
+        print(setColorGreen("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameTicTacToe.pointDraw) + " points"))
         addPoint(curPlayers.player1.id,gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
         addPoint(curPlayers.player2.id, gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
 
@@ -199,15 +199,15 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
     displayGrid(gameTicTacToe,currentPlayers)
     currentPlayer = currentPlayers.player1
     while not finished:
-        print(set_color_green("("+ currentPlayer.name + ")") + " à toi de jouer")
+        print(setColorGreen("("+ currentPlayer.name + ")") + " à toi de jouer")
         choiceX = input("choisi ou tu souhaites deposer ton pion sur l'axe x")
         while not isDigit(choiceX) or int(choiceX) <= 0 or int(choiceX) >= 4 :
-            choiceX = input(set_color_yellow("chosi sur l'axe x ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
+            choiceX = input(setColorYellow("chosi sur l'axe x ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
         choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y")
         while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
-            choiceY = input(set_color_yellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
+            choiceY = input(setColorYellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
         if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
-            print(set_color_red(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+            print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
             continue
         displayGrid(gameTicTacToe, currentPlayers)
         if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe):
