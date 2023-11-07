@@ -24,8 +24,12 @@ def leaderBoardN(name: str, collName:str, conn : Connection):
     print("ID    Nom            Score")
     print("-" * 30)
     for player in users:
-        print(f"{player[0]}{space * (5 - len(str(player[0])))}{player[1]}{space * (15 - len(str(player[1])))}{player[2]}{space * (10 - len(str(player[1])))}")
-    print("\n")
+        print(
+            f"{player[0]}{space * (5 - len(str(player[0])))}
+              {player[1]}{space * (15 - len(str(player[1])))}
+              {player[2]}{space * (10 - len(str(player[1])))}"
+              )
+    print()
 
 
 def displayLeaderBoards(conn : Connection):

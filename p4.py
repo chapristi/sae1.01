@@ -112,6 +112,19 @@ def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentP
 
 
 def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
+    """
+        Vérifie s'il y a égalité dans la partie de Puissance 4.
+
+        Cette fonction vérifie s'il y a égalité (match nul) dans la partie de Puissance 4. Il y a égalité si la grille est remplie et qu'aucun joueur n'a gagné.
+
+        Args:
+            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
+            currPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+
+        Returns:
+            bool: True s'il y a égalité, False sinon.
+
+    """
     i : int
     j : int
     isDraw: bool
@@ -127,18 +140,17 @@ def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
 
 def play(gameP4 : GameP4, column :int, number : int)->bool:
     """
-        Vérifie s'il y a égalité dans la partie de Puissance 4.
-
-        Cette fonction vérifie s'il y a égalité (match nul) dans la partie de Puissance 4. Il y a égalité si la grille est remplie et qu'aucun joueur n'a gagné.
+        Cette fonction permet à un joueur de jouer un pion dans la colonne spécifiée.
 
         Args:
-            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
-            currPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
+            gameP4 (GameP4): L'objet du jeu Puissance 4.
+            column (int): La colonne dans laquelle le joueur souhaite jouer.
+            number (int): Le numéro du joueur qui effectue le coup.
 
         Returns:
-            bool: True s'il y a égalité, False sinon.
-
+            bool: True si le coup a été joué avec succès, False sinon.
     """
+ 
     i : int
     canPlay : bool
 
@@ -216,7 +228,6 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
     displayGrid(gameP4,currentPlayers)
     currentPlayer = currentPlayers.player1
     while not finished:
-        print(checkDraw(gameP4,currentPlayer))
         print(set_color_green("("+currentPlayer.name + ")") + " à toi de jouer")
         choice = input("chosi la collonne ou tu souhaites deposer ton pion")
         while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8 :
