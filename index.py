@@ -1,9 +1,9 @@
 import sqlite3
 from entity.player import CurrentPlayers,Player,currentPlayersInit
 from helperPlayer import changePlayer
-from dataServices.sql_commands import connect,register
+from dataServices.sqlCommands import connect,register
 from utils.colors import *
-from utils.input_checker import isDigit
+from utils.inputChecker import isDigit
 from match import game as gameMatch
 from p4 import game as gameP4
 from riddle import game as gameRiddle
@@ -79,8 +79,8 @@ if __name__ == "__main__":
         print(set_color_green("\nYAA! choisisez le jeu:\n"))
         gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
         while not isDigit(gameChoice):
-            print(set_color_red("ce choix n'existe pas"))
-            gameChoice = input(set_color_yellow("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  "))
+            print(set_color_red("ce choix n'existe pas\n"))
+            gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
 
         match int(gameChoice):
             case 1 : 

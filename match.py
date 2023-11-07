@@ -1,10 +1,10 @@
 #from player import CurrentPlayers
-from entity.game_match import GameMatch, gameMatchInit
+from entity.gameMatch import GameMatch, gameMatchInit
 from utils.colors import set_color_green,set_color_red,set_color_yellow
-from utils.input_checker import isDigit
+from utils.inputChecker import isDigit
 from sqlite3 import Connection
 from entity.player import *
-from dataServices.sql_commands import addPoint
+from dataServices.sqlCommands import addPoint
 from helperPlayer import getOtherPlayer
 
 def displayStartingMenu() -> None:

@@ -1,9 +1,9 @@
-from entity.game_riddle import *
+from entity.gameRiddle import *
 from entity.player import *
-from utils.input_checker import isDigit
+from utils.inputChecker import isDigit
 from sqlite3 import Connection
 from utils.colors import *
-from dataServices.sql_commands import addPoint
+from dataServices.sqlCommands import addPoint
 from helperPlayer import getOtherPlayer
 
 def display_result(gameRiddle : GameRiddle, looser: Player, winner: Player):
@@ -72,6 +72,16 @@ def pointsDistribution(gameRiddle : GameRiddle, winner: Player, looser : Player 
 
     
 def game(currentPlayers: CurrentPlayers, conn : Connection):
+    """
+        Cette fonction gère le déroulement du jeu de devinette, où un joueur doit deviner un nombre.
+
+        Args:
+            currentPlayers (CurrentPlayers): L'objet contenant les joueurs actuels.
+            conn (Connection): L'objet de connexion.
+
+        Returns:
+            None
+    """
     gameRiddle : GameRiddle
     gameRiddle = GameRiddle()
     information : str 

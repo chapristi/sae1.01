@@ -1,4 +1,4 @@
-from dataServices.sql_commands import getTopUsersByColumn
+from dataServices.sqlCommands import getTopUsersByColumn
 from sqlite3 import Connection
 def leaderBoardN(name: str, collName:str, conn : Connection):
     """
@@ -24,11 +24,10 @@ def leaderBoardN(name: str, collName:str, conn : Connection):
     print("ID    Nom            Score")
     print("-" * 30)
     for player in users:
-        print(
-            f"{player[0]}{space * (5 - len(str(player[0])))}
-              {player[1]}{space * (15 - len(str(player[1])))}
-              {player[2]}{space * (10 - len(str(player[1])))}"
-              )
+        print(f"{player[0]}{space * (5 - len(str(player[0])))} "
+                f"{player[1]}{space * (15 - len(str(player[1])))} "
+                f"{player[2]}{space * (10 - len(str(player[2])))}")
+
     print()
 
 

@@ -1,8 +1,8 @@
 from entity.gameP4 import GameP4,gameP4Init
 from entity.player import CurrentPlayers,Player
 from utils.colors import *
-from utils.input_checker import isDigit
-from dataServices.sql_commands import addPoint
+from utils.inputChecker import isDigit
+from dataServices.sqlCommands import addPoint
 from sqlite3 import Connection
 from helperPlayer import getOtherPlayer
 
@@ -48,9 +48,9 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
 
-    while i < gameP4.size_y - 3 and not isWin:
+    while i < gameP4.sizeY - 3 and not isWin:
         j = 0
-        while j < gameP4.size_x:
+        while j < gameP4.sizeX:
             if (gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j] == currentPlayerNumber
                 and gameP4.plate[i+2][j] == currentPlayerNumber and gameP4.plate[i+3][j] == currentPlayerNumber):
                 isWin = True
@@ -58,9 +58,9 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
         i += 1
 
     i = 0
-    while i < gameP4.size_y and not isWin:
+    while i < gameP4.sizeY and not isWin:
         j = 0
-        while j < gameP4.size_x - 3 and not isWin:
+        while j < gameP4.sizeX - 3 and not isWin:
             if (gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i][j+1] == currentPlayerNumber
                 and gameP4.plate[i][j+2] == currentPlayerNumber and gameP4.plate[i][j+3] == currentPlayerNumber):
                 isWin = True
@@ -68,9 +68,9 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
         i += 1
 
     i = 0
-    while i < gameP4.size_y and not isWin:
+    while i < gameP4.sizeY and not isWin:
         j = 0
-        while j < gameP4.size_x and not isWin:
+        while j < gameP4.sizeX and not isWin:
             if (j >= 3 and i <= 2 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j-1] == currentPlayerNumber
                 and gameP4.plate[i+2][j-2] == currentPlayerNumber and gameP4.plate[i+3][j-3] == currentPlayerNumber):
                 isWin = True
@@ -132,8 +132,8 @@ def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
     isDraw = True
     if checkWin(gameP4,currPlayer):
         return not isDraw
-    for i in range(0,gameP4.size_y):
-        for j in range(0, gameP4.size_x):
+    for i in range(0,gameP4.sizeY):
+        for j in range(0, gameP4.sizeX):
             if gameP4.plate[i][j] == 0:
                 isDraw  = False
     return isDraw
@@ -156,7 +156,7 @@ def play(gameP4 : GameP4, column :int, number : int)->bool:
 
     canPlay = False
     i = 0
-    for i in range(gameP4.size_y - 1 ,-1,-1) :
+    for i in range(gameP4.sizeY - 1 ,-1,-1) :
         if gameP4.plate[i][column-1]  == 0 and not canPlay:
             gameP4.plate[i][column-1] = number
             canPlay = True
@@ -184,13 +184,13 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
     i = 0 
     j = 0
     print("  " ,end="")
-    for i in range(0,gameP4.size_x):
+    for i in range(0,gameP4.sizeX):
         print(set_color_red(str(i+1)), end="    ")
     print()
-    for i in range(0,gameP4.size_y):
-        print(set_color_blue("+") + set_color_blue("----+")*gameP4.size_x)
+    for i in range(0,gameP4.sizeY):
+        print(set_color_blue("+") + set_color_blue("----+")*gameP4.sizeX)
         print(set_color_blue("|"),end="")
-        for j in range(0,gameP4.size_x):
+        for j in range(0,gameP4.sizeX):
             if gameP4.plate[i][j] == currentPLayers.player1.playerNumber:
                 print(f" {gameP4.player1Pawn}  "+set_color_blue("|"),end="")
             elif gameP4.plate[i][j] == currentPLayers.player2.playerNumber:
@@ -198,7 +198,7 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
             else:
                 print(f"    "+set_color_blue("|"),end="")
         print()
-    print(set_color_blue("+") + set_color_blue("----+")*gameP4.size_x)
+    print(set_color_blue("+") + set_color_blue("----+")*gameP4.sizeX)
 
 
 def game(currentPlayers : CurrentPlayers, conn : Connection):

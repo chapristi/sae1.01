@@ -3,9 +3,9 @@ from utils.colors import *
 from entity.player import *
 from entity.gameTicTacToe import *
 from sqlite3 import Connection
-from utils.input_checker import isDigit
+from utils.inputChecker import isDigit
 from helperPlayer import getOtherPlayer
-from dataServices.sql_commands import addPoint
+from dataServices.sqlCommands import addPoint
 
 def displayStartingMenu():
     """
@@ -42,13 +42,13 @@ def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)-
     i = 0 
     j = 0
     print("    ", end="")
-    for j in range(gameTicTacToe.size_y): 
+    for j in range(gameTicTacToe.sizeY): 
         print(str(j + 1) + "   ", end="")
     print()
-    for i in range(0,gameTicTacToe.size_y):
-        print("  +" + "---+"*gameTicTacToe.size_x)
+    for i in range(0,gameTicTacToe.sizeY):
+        print("  +" + "---+"*gameTicTacToe.sizeX)
         print(str(i+1)+" |",end="")
-        for j in range(0,gameTicTacToe.size_x):
+        for j in range(0,gameTicTacToe.sizeX):
             if gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber:
                 print(f" {gameTicTacToe.player1Pawn} |",end="")
             elif gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
@@ -56,7 +56,7 @@ def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)-
             else:
                 print(f"   |",end="")
         print()
-    print("  +" + "---+"*gameTicTacToe.size_x)
+    print("  +" + "---+"*gameTicTacToe.sizeX)
 
 def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     """
@@ -80,12 +80,12 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
 
-    while i < gameTicTacToe.size_y  and not isWin:
+    while i < gameTicTacToe.sizeY  and not isWin:
         if (gameTicTacToe.plate[i][0] == currentPlayerNumber and gameTicTacToe.plate[i][1] == currentPlayerNumber and  gameTicTacToe.plate[i][2] == currentPlayerNumber):
             isWin = True
         i += 1
     i = 0
-    while i < gameTicTacToe.size_x  and not isWin:
+    while i < gameTicTacToe.sizeX  and not isWin:
         if (gameTicTacToe.plate[0][i] == currentPlayerNumber and gameTicTacToe.plate[1][i] == currentPlayerNumber and  gameTicTacToe.plate[2][i] == currentPlayerNumber):
             isWin = True
         i += 1
@@ -114,8 +114,8 @@ def checkDraw(gameTicTacToe : GameTicTacToe):
     i = 0
     j = 0
     isDraw = True
-    while i <  gameTicTacToe.size_y and isDraw:
-        while j < gameTicTacToe.size_x and isDraw:
+    while i <  gameTicTacToe.sizeY and isDraw:
+        while j < gameTicTacToe.sizeX and isDraw:
             if gameTicTacToe.plate[i][j] == 0 :
                 isDraw = False
             j+=1
