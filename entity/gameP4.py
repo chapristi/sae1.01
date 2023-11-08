@@ -1,4 +1,4 @@
-from utils.colors import setColorRed,setColorYellow
+from helpers.colors import setColorRed,setColorYellow
 class GameP4:
     colName : str
     pointWin : int

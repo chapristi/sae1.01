@@ -1,8 +1,8 @@
 from entity.gameRiddle import *
 from entity.player import *
-from utils.inputChecker import isDigit
+from helpers.inputChecker import isDigit
 from sqlite3 import Connection
-from utils.colors import *
+from helpers.colors import *
 from dataServices.sqlCommands import addPoint
 from helperPlayer import getOtherPlayer
 

@@ -1,7 +1,7 @@
 #from player import CurrentPlayers
 from entity.gameMatch import GameMatch, gameMatchInit
-from utils.colors import setColorGreen,setColorRed,setColorYellow
-from utils.inputChecker import isDigit
+from helpers.colors import setColorGreen,setColorRed,setColorYellow
+from helpers.inputChecker import isDigit
 from sqlite3 import Connection
 from entity.player import *
 from dataServices.sqlCommands import addPoint

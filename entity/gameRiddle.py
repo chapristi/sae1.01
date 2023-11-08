@@ -1,6 +1,6 @@
-from utils.inputChecker import isDigit
+from helpers.inputChecker import isDigit
 from entity.player import CurrentPlayers
-from utils.colors import setColorGreen,setColorYellow
+from helpers.colors import setColorGreen,setColorYellow
 import getpass
 
 class GameRiddle:

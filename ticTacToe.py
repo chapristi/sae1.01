@@ -1,9 +1,9 @@
 
-from utils.colors import *
+from helpers.colors import *
 from entity.player import *
 from entity.gameTicTacToe import *
 from sqlite3 import Connection
-from utils.inputChecker import isDigit
+from helpers.inputChecker import isDigit
 from helperPlayer import getOtherPlayer
 from dataServices.sqlCommands import addPoint
 

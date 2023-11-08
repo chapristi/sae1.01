@@ -2,8 +2,8 @@ import sqlite3
 from entity.player import CurrentPlayers,Player,currentPlayersInit
 from helperPlayer import changePlayer
 from dataServices.sqlCommands import connect,register
-from utils.colors import *
-from utils.inputChecker import isDigit
+from helpers.colors import *
+from helpers.inputChecker import isDigit
 from match import game as gameMatch
 from p4 import game as gameP4
 from riddle import game as gameRiddle
