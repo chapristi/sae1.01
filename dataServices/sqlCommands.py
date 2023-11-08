@@ -1,5 +1,6 @@
 from sqlite3 import Connection,Cursor
 from entity.player import Player,playerInit
+
 def register(name : str, password : str, conn : Connection)->Player:
     """
         Enregistre un nouveau joueur dans la base de données avec un nom et un mot de passe.
