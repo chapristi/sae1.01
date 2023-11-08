@@ -5,7 +5,7 @@ from helpers.inputChecker import isDigit
 from sqlite3 import Connection
 from entity.player import *
 from dataServices.sqlCommands import addPoint
-from helperPlayer import getOtherPlayer
+from helpers.helperPlayer import getOtherPlayer
 
 def displayStartingMenu() -> None:
     """

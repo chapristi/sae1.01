@@ -1,6 +1,6 @@
 import sqlite3
 from entity.player import CurrentPlayers,Player,currentPlayersInit
-from helperPlayer import changePlayer
+from helpers.helperPlayer import changePlayer
 from dataServices.sqlCommands import connect,register
 from helpers.colors import *
 from helpers.inputChecker import isDigit

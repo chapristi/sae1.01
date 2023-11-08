@@ -4,7 +4,7 @@ from entity.player import *
 from entity.gameTicTacToe import *
 from sqlite3 import Connection
 from helpers.inputChecker import isDigit
-from helperPlayer import getOtherPlayer
+from helpers.helperPlayer import getOtherPlayer
 from dataServices.sqlCommands import addPoint
 
 def displayStartingMenu():
