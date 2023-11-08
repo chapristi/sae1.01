@@ -18,6 +18,7 @@ if __name__ == "__main__":
     choice: str
     username : str
     password : str
+    con : sqlite3.Connection
 
     player1 = Player()
     player2 = Player()
