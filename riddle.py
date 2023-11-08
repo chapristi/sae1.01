@@ -23,7 +23,7 @@ def displayStartingMenu():
     print(setColorGreen("Bienvenue à vous dans le jeu des Devinettes"))
     print(setColorGreen("REGLES DU JEU \n 1. Le joueur 1 choisi le nombre que le joueur 2 va devoir trouvé se situant entre (0 et 200) ainsi que le nombre de tentative max que le joueur deux a pour trouver (> 1) le nombre \n 2. Le joueur deux donne alors un nombre qui pense etre le bon \n 3. Le joueur 2 indique au joueur un si le nombre donné est (trop petit trop grand ou c'est gagné)\n4. Le jeu s'arrete quand le joeur 2 à trouvé le bon nombre dans le nombre de coups imparti ou quand son nombre de tentative a depasser le nombre de tentatives maximale"))
     print(setColorGreen("Chargement..."))
-    
+
 def display_result(gameRiddle : GameRiddle, looser: Player, winner: Player):
     """
         Affiche les résultats d'une partie.
@@ -82,7 +82,6 @@ def pointsDistribution(gameRiddle : GameRiddle, winner: Player, looser : Player 
 
     Returns:
         None
-
     """
     
     addPoint(winner.id,gameRiddle.pointWin,conn,gameRiddle.colName)

@@ -21,7 +21,6 @@ def gameTicTacToeInit(gameTicTacToe : GameTicTacToe):
 
         Returns:
             None
-
     """
     gameTicTacToe.colName = "scoreTtt"
     gameTicTacToe.player1Pawn = "X"

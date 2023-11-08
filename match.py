@@ -18,8 +18,6 @@ def displayStartingMenu() -> None:
 
         Returns:
             None
-
-
     """
     print (setColorGreen("RÉGLES DU JEU \n 1. On distribue 20 allumettes par joueur \n 2. Chacun son tour pose un bâtonnet sur le goulot d'une bouteille vide. \n 3. Si un joueur maladroit fait tomber les allumettes en plaçant la sienne, il les récupère toutes ! \n 4. Le premier qui n'a plus d'allumettes a gagné ! \n 5. Chaque joueur a seulement le droit de prendre un maximum de 3 allumette "))
     print(setColorGreen("Bienvenue sur le jeu des Allumettes etes vous pret a jouer?"))
@@ -38,7 +36,6 @@ def displayWin(winner : Player, currentPLayers: CurrentPlayers,gameMatch : GameM
 
         Returns:
             None
-
     """
     looser : Player
 
@@ -60,7 +57,6 @@ def pointsRepartition(gameMatch : GameMatch,conn :Connection,currentPlayers:Curr
 
         Returns:
             None
-
     """
     looser : Player
 

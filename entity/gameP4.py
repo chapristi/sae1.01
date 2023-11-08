@@ -22,7 +22,6 @@ def gameP4Init(gameP4 : GameP4):
 
         Returns:
             None
-
     """
 
     gameP4.colName = "scoreP4"

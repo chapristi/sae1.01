@@ -33,7 +33,6 @@ def getOtherPlayer(currentPlayers: CurrentPlayers, currentPlayer : Player)->Play
 
         Returns:
             Player: L'autre joueur parmi les deux joueurs actuels.
-
     """
     if currentPlayer == currentPlayers.player1:
         return currentPlayers.player2

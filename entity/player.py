@@ -24,7 +24,6 @@ def playerInit(player : Player, id : int, name : str, scoreRiddle : int, scoreTt
 
         Returns:
             None
-
     """
     player.id = id
     player.name = name

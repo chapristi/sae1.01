@@ -123,7 +123,6 @@ def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
 
         Returns:
             bool: True s'il y a égalité, False sinon.
-
     """
     i : int
     j : int
@@ -176,7 +175,6 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
 
         Returns:
             None
-
     """
     i : int
     j : int
@@ -213,7 +211,6 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
 
         Returns:
             None
-
     """
     gameP4 : GameP4
     finished : bool
