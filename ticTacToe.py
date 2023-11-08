@@ -114,6 +114,7 @@ def checkDraw(gameTicTacToe : GameTicTacToe):
     i = 0
     j = 0
     isDraw = True
+    
     while i <  gameTicTacToe.sizeY and isDraw:
         while j < gameTicTacToe.sizeX and isDraw:
             if gameTicTacToe.plate[i][j] == 0 :

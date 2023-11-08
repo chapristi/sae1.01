@@ -226,9 +226,9 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+currentPlayer.name + ")") + " à toi de jouer")
-        choice = input("chosi la collonne ou tu souhaites deposer ton pion")
+        choice = input("choisi la collonne ou tu souhaites deposer ton pion")
         while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8 :
-            choice = input(setColorYellow("chosi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
+            choice = input(setColorYellow("choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
         if(not play(gameP4,int(choice),currentPlayer.playerNumber)):
             print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
             continue

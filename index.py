@@ -11,6 +11,7 @@ from leaderBoard import displayLeaderBoards
 from ticTacToe import game as gameTicTacToe
 import getpass
 
+
 if __name__ == "__main__":
     currentPlayers : CurrentPlayers
     player1 : Player
@@ -92,10 +93,10 @@ if __name__ == "__main__":
                 gameTicTacToe(currentPlayers,con)
             case 2:
                 gameMatch(currentPlayers,con)
-            case 5 : 
+            case 5: 
                 displayLeaderBoards(con)
             case 6:
-                print(setColorGreen("Merci d'avoir jouer à bientot"))
+                print(setColorGreen("Merci d'avoir joué à bientot"))
                 end = True
             case _:
                 print(setColorRed("ce choix n'existe pas"))
