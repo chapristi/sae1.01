@@ -140,10 +140,12 @@ def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choic
             bool: True si le coup a été joué avec succès (la case était vide), False sinon.
 
     """
+    canPlay : bool
+    canPlay = False
     if gameTicTacToe.plate[choiceY -1][choiceX -1] == 0:
         gameTicTacToe.plate[choiceY -1][choiceX -1] = currentPlayer.playerNumber
-        return True
-    return False
+        canPlay = True
+    return canPlay
 
 def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection):
     """

@@ -10,7 +10,7 @@ class GameRiddle:
     numberToGuess : int
     maxAttempts : int
     attempts : int
-    isOver : bool
+
 
 def gameRiddleInit(gameRiddle : GameRiddle, currentPlayers : CurrentPlayers)->None:
     """
@@ -28,7 +28,6 @@ def gameRiddleInit(gameRiddle : GameRiddle, currentPlayers : CurrentPlayers)->No
     gameRiddle.pointLoose = 2
     gameRiddle.pointWin = 15
     gameRiddle.colName = "scoreRiddle"
-    gameRiddle.isOver = False
     gameRiddle.attempts = 0
     numberToGuess = getpass.getpass("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez le nombre à deviner entre 0 et 200")
     while not isDigit(numberToGuess) or int(numberToGuess) <  0 or int(numberToGuess) > 200:

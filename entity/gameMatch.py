@@ -3,7 +3,6 @@ class GameMatch:
     pointWin : int
     pointLoose : int
     numberOfMatches : int
-    isOver : bool
 
 def gameMatchInit(gameMatch : GameMatch)->None:
    """
@@ -18,4 +17,3 @@ def gameMatchInit(gameMatch : GameMatch)->None:
    gameMatch.numberOfMatches = 20
    gameMatch.pointWin = 15
    gameMatch.pointLoose = 2
-   gameMatch.isOver = False
