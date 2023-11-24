@@ -90,7 +90,7 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
             isWin = True
         i += 1
     i = 0
-    if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2]) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0])):
+    if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2]) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0] == currentPlayer)):
         isWin = True
     return isWin
 

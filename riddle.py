@@ -105,6 +105,7 @@ def game(currentPlayers: CurrentPlayers, conn : Connection):
     winner: Player
     looser : Player
     choice : str
+    displayStartingMenu()
     winner = currentPlayers.player1
     gameRiddleInit(gameRiddle,currentPlayers)
     while not gameRiddle.isOver:

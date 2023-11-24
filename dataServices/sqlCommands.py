@@ -43,6 +43,7 @@ def register(name : str, password : str, conn : Connection)->Player:
         playerInit(player, int(playerElements[0]), playerElements[1],int(playerElements[2]), int(playerElements[3]), int(playerElements[4]),int(playerElements[5]))
         return player
     except Exception:
+        player.id = -1
         return player
     finally:
         if cur is not None:

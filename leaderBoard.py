@@ -1,5 +1,6 @@
 from dataServices.sqlCommands import getTopUsersByColumn
 from sqlite3 import Connection
+from helpers.colors import setColorYellow
 def leaderBoardN(name: str, collName:str, conn : Connection):
     """
         Affiche le tableau du Leaderboard pour une colonne donnée.
@@ -20,7 +21,7 @@ def leaderBoardN(name: str, collName:str, conn : Connection):
 
     space = " "
     users = getTopUsersByColumn(collName,conn)
-    print("Table du Leaderboard "+name +":\n")
+    print(setColorYellow("Table du Leaderboard "+name +":\n"))
     print("ID    Nom            Score")
     print("-" * 30)
     for player in users:

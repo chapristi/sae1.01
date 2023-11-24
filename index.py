@@ -37,11 +37,11 @@ if __name__ == "__main__":
 
     while player1.id == -1:
         print("Connectez-vous à votre compte joueur 1")
-        choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
+        choice = input("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(setColorYellow("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("username")
-        password = getpass.getpass("password")
+            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
+        username = input("username ")
+        password = getpass.getpass("password ")
         if int(choice) == 0:
             player1 = connect(username,password, con)
             if player1.id == -1:
@@ -51,15 +51,15 @@ if __name__ == "__main__":
             if player1.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
         else:
-            print(setColorRed("ce choix n'existe pas"))
+            print(setColorRed("Ce choix n'existe pas"))
 
     while player2.id == -1:
         print("Connectez-vous à votre compte joueur 2")
         choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(setColorYellow("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("username")
-        password = getpass.getpass("password")
+            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
+        username = input("username ")
+        password = getpass.getpass("password ")
         if int(choice) == 0 :
             player2 = connect(username,password, con)
             if player2.id == -1:
@@ -73,16 +73,16 @@ if __name__ == "__main__":
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
 
         else:
-            print(setColorRed("ce choix n'existe pas"))
+            print(setColorRed("Ce choix n'existe pas"))
             
     currentPlayersInit(currentPlayers, player1, player2)
     end = False
     while not end:
-        print(setColorGreen("\nYAA! choisisez le jeu:\n"))
-        gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
+        print(setColorGreen("\nChoisisez le jeu:\n"))
+        gameChoice = input("1 => Pour jouer aux devinettes \n2 => Pour jouer au jeu des allumettes\n3 => Pour jouer au jeu du morpion\n4 => Pour jouer au jeu du puissance 4\n5 => Pour afficher le classement des joueurs par jeux\n6 => Pour quitter le jeu\nMon choix est  ")
         while not isDigit(gameChoice):
-            print(setColorRed("ce choix n'existe pas\n"))
-            gameChoice = input("1 => jeu des devinettes \n2 => jeu des allumettes\n3 => jeu du morpion\n4 => jeu du puissance 4\n5 => Classement\n6 => quitter\nmon choix est  ")
+            print(setColorRed("Ce choix n'existe pas\n"))
+            gameChoice = input("1 => Pour jouer aux devinettes \n2 => Pour jouer au jeu des allumettes\n3 => Pour jouer au jeu du morpion\n4 => Pour jouer au jeu du puissance 4\n5 => Pour afficher le classement des joueurs par jeux\n6 => Pour quitter le jeu\nMon choix est  ")
 
         match int(gameChoice):
             case 1 : 
@@ -99,6 +99,6 @@ if __name__ == "__main__":
                 print(setColorGreen("Merci d'avoir joué à bientot"))
                 end = True
             case _:
-                print(setColorRed("ce choix n'existe pas"))
+                print(setColorRed("Ce choix n'existe pas"))
         changePlayer(currentPlayers)
     con.close()
