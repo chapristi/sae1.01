@@ -213,11 +213,11 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
             choiceY = input(setColorYellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
         if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
             print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-            continue
-        displayGrid(gameTicTacToe, currentPlayers)
-        if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
-            finished = True
-            continue
-        currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
+        else:    
+            displayGrid(gameTicTacToe, currentPlayers)
+            if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
+                finished = True
+            else:
+                currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
     pointsDistribution(gameTicTacToe, currentPlayer, currentPlayers, conn)
     
