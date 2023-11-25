@@ -43,7 +43,7 @@ def displayWin(winner : Player, currentPLayers: CurrentPlayers,gameMatch : GameM
     print(setColorGreen("Bravo c'est ("+  winner.name + ") qui l'emporte et gagne "+ str(gameMatch.pointWin)+" points"))
     print(setColorYellow("Dommage c'est (" + looser.name + ") qui a perdu mais remporte "+ str(gameMatch.pointWin)+" points"))
 
-def pointsRepartition(gameMatch : GameMatch,conn :Connection,currentPlayers:CurrentPlayers,winner:Player):
+def pointsRepartition(gameMatch : GameMatch,conn :Connection,currentPlayers:CurrentPlayers,winner:Player)->None:
     """
         Répartit les points pour un match entre deux joueurs.
 

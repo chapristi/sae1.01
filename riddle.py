@@ -6,7 +6,7 @@ from helpers.colors import *
 from dataServices.sqlCommands import addPoint
 from helpers.helperPlayer import getOtherPlayer
 
-def displayStartingMenu():
+def displayStartingMenu()->None:
     """
         Affiche le menu de démarrage du jeu des Devinettes.
         
@@ -24,7 +24,7 @@ def displayStartingMenu():
     print(setColorGreen("REGLES DU JEU \n 1. Le joueur 1 choisi le nombre que le joueur 2 va devoir trouvé se situant entre (0 et 200) ainsi que le nombre de tentative max que le joueur deux a pour trouver (> 1) le nombre \n 2. Le joueur deux donne alors un nombre qui pense etre le bon \n 3. Le joueur 2 indique au joueur un si le nombre donné est (trop petit trop grand ou c'est gagné)\n4. Le jeu s'arrete quand le joeur 2 à trouvé le bon nombre dans le nombre de coups imparti ou quand son nombre de tentative a depasser le nombre de tentatives maximale"))
     print(setColorGreen("Chargement..."))
 
-def displayResult(gameRiddle : GameRiddle, looser: Player, winner: Player):
+def displayResult(gameRiddle : GameRiddle, looser: Player, winner: Player)->None:
     """
         Affiche les résultats d'une partie.
 
@@ -66,7 +66,7 @@ def guess_number(gameRiddle : GameRiddle, information : str, choice : int) -> bo
         isLiar = False
     return isLiar
 
-def pointsDistribution(gameRiddle : GameRiddle, winner: Player, looser : Player ,conn : Connection):
+def pointsDistribution(gameRiddle : GameRiddle, winner: Player, looser : Player ,conn : Connection)->None:
     """
     Distribue les points aux joueurs gagnants et perdants dans le jeu de devinette (Riddle).
 
@@ -88,7 +88,7 @@ def pointsDistribution(gameRiddle : GameRiddle, winner: Player, looser : Player 
     addPoint(looser.id,gameRiddle.pointLoose,conn,gameRiddle.colName)
 
     
-def game(currentPlayers: CurrentPlayers, conn : Connection):
+def game(currentPlayers: CurrentPlayers, conn : Connection)->None:
     """
         Cette fonction gère le déroulement du jeu de devinette, où un joueur doit deviner un nombre.
 

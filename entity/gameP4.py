@@ -11,7 +11,7 @@ class GameP4:
     plate : list[list[int]]
 
 
-def gameP4Init(gameP4 : GameP4):
+def gameP4Init(gameP4 : GameP4)->None:
     """
         Initialise un objet GameP4 avec les paramètres spécifiques.
 

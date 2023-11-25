@@ -7,7 +7,7 @@ from helpers.inputChecker import isDigit
 from helpers.helperPlayer import getOtherPlayer
 from dataServices.sqlCommands import addPoint
 
-def displayStartingMenu():
+def displayStartingMenu()->None:
     """
         Affiche le menu de démarrage du jeu du Morpion.
 
@@ -97,7 +97,7 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     return isWin
 
 
-def checkDraw(gameTicTacToe : GameTicTacToe):
+def checkDraw(gameTicTacToe : GameTicTacToe)->bool:
     """
         Vérifie si la partie est un match nul (matche null).
 
@@ -149,7 +149,7 @@ def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choic
         canPlay = True
     return canPlay
 
-def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection):
+def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection)->None:
     """
         Distribue les points en fonction du résultat de la partie.
 
@@ -176,7 +176,7 @@ def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlay
         addPoint(curPlayers.player1.id,gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
         addPoint(curPlayers.player2.id, gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
 
-def game(currentPlayers : CurrentPlayers, conn : Connection):
+def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     """
         Déroule le jeu du Morpion entre deux joueurs.
 

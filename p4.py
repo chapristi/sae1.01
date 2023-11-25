@@ -6,7 +6,7 @@ from dataServices.sqlCommands import addPoint
 from sqlite3 import Connection
 from helpers.helperPlayer import getOtherPlayer
 
-def displayStartingMenu():
+def displayStartingMenu()->None:
     """
         Affiche le menu de démarrage du jeu Puissance 4.
 
@@ -84,7 +84,7 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
     return isWin
 
 
-def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection):
+def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection)->None:
     """
         Gère la distribution des points à la fin de la partie de Puissance 4.
 
@@ -201,7 +201,7 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
     print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
 
 
-def game(currentPlayers : CurrentPlayers, conn : Connection):
+def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     """
         Gère le déroulement d'une partie de Puissance 4.
 

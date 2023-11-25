@@ -1,4 +1,4 @@
-from sqlite3 import Connection,Cursor
+from sqlite3 import Connection,Cursor,Error as sqliteErr
 from entity.player import Player,playerInit
 
 def register(name : str, password : str, conn : Connection)->Player:
@@ -44,7 +44,7 @@ def register(name : str, password : str, conn : Connection)->Player:
             return player
         playerInit(player, int(playerElements[0]), playerElements[1])
         return player
-    except Exception:
+    except sqliteErr:
         player.id = -1
         return player
     finally:
@@ -93,7 +93,7 @@ def connect(name :str, password : str , conn : Connection) -> Player:
             return player
         playerInit(player, int(playerElements[0]), playerElements[1])
         return player
-    except Exception:
+    except sqliteErr:
         player.id = -1
         return player
     finally:
@@ -134,7 +134,7 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
         )
         conn.commit()
         return True
-    except Exception:
+    except sqliteErr:
         return False
     finally:
         if cur is not None:
@@ -169,7 +169,7 @@ def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
                     ))
         playersElements  = res.fetchall()
         return playersElements
-    except Exception:
+    except sqliteErr:
         return playersElements
     finally:
         if cur is not None:

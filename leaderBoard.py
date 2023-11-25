@@ -1,7 +1,7 @@
 from dataServices.sqlCommands import getTopUsersByColumn
 from sqlite3 import Connection
 from helpers.colors import setColorYellow
-def leaderBoardN(name: str, collName:str, conn : Connection):
+def leaderBoardN(name: str, collName:str, conn : Connection)->None:
     """
         Affiche le tableau du Leaderboard pour une colonne donnée.
 
@@ -32,7 +32,7 @@ def leaderBoardN(name: str, collName:str, conn : Connection):
     print()
 
 
-def displayLeaderBoards(conn : Connection):
+def displayLeaderBoards(conn : Connection)->None:
     """
         Affiche les tableaux du Leaderboard pour plusieurs colonnes.
 

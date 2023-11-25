@@ -1,6 +1,6 @@
 from entity.player import CurrentPlayers,Player
 
-def changePlayer(currPlayers: CurrentPlayers):
+def changePlayer(currPlayers: CurrentPlayers)->None:
     """
         Permet d'echanger le joueur1 avec le joueur2 pour que le role change en fonction du jeu
 

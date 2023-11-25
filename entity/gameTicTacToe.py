@@ -10,7 +10,7 @@ class GameTicTacToe:
     plate : list[list[int]]
 
 
-def gameTicTacToeInit(gameTicTacToe : GameTicTacToe):
+def gameTicTacToeInit(gameTicTacToe : GameTicTacToe)->None:
     """
         Initialise un objet GameTicTacToe avec les paramètres spécifiques.
 
