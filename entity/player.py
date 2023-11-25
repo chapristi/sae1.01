@@ -2,12 +2,9 @@ class Player:
     id : int
     name : str
     playerNumber : int
-    scoreRiddle: int
-    scoreTtt : int
-    scoreMatches : int
-    scoreP4 : int
+    
 
-def playerInit(player : Player, id : int, name : str, scoreRiddle : int, scoreTtt:int, scoreMatches : int, scoreP4 : int):
+def playerInit(player : Player, id : int, name : str):
     """
         Initialise un objet joueur avec les informations fournies.
 
@@ -27,10 +24,7 @@ def playerInit(player : Player, id : int, name : str, scoreRiddle : int, scoreTt
     """
     player.id = id
     player.name = name
-    player.scoreRiddle = scoreRiddle
-    player.scoreTtt = scoreTtt
-    player.scoreMatches = scoreMatches
-    player.scoreP4 = scoreP4
+   
 
 class CurrentPlayers:
     player1 : Player

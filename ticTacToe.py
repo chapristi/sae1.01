@@ -79,17 +79,19 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
   
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
-
+    #verification horizontale
     while i < gameTicTacToe.sizeY  and not isWin:
         if (gameTicTacToe.plate[i][0] == currentPlayerNumber and gameTicTacToe.plate[i][1] == currentPlayerNumber and  gameTicTacToe.plate[i][2] == currentPlayerNumber):
             isWin = True
         i += 1
     i = 0
+    #verification verticale
     while i < gameTicTacToe.sizeX  and not isWin:
         if (gameTicTacToe.plate[0][i] == currentPlayerNumber and gameTicTacToe.plate[1][i] == currentPlayerNumber and  gameTicTacToe.plate[2][i] == currentPlayerNumber):
             isWin = True
         i += 1
     i = 0
+    #verification des diagonales
     if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2]) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0] == currentPlayer)):
         isWin = True
     return isWin
@@ -219,33 +221,3 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
         currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
     pointsDistribution(gameTicTacToe, currentPlayer, currentPlayers, conn)
     
-
-"""
-#data set de test tout ca est fait dans le main normalement
-cp : CurrentPlayers
-p1 :Player
-p2: Player
-p1 = Player()
-p2 = Player()
-
-p1.id = 1
-p1.name = "Louis"
-p1.scoreMatches = 10
-p1.scoreP4 = 10
-p1.scoreRiddle = 10
-p1.scoreTtt  = 10
-
-p2.id = 10
-p2.name = "Lorois"
-p2.scoreMatches = 10
-p2.scoreP4 = 10
-p2.scoreRiddle = 10
-p2.scoreTtt  = 10
-cp = CurrentPlayers()
-cp.player1 = p1
-cp.player2 = p2
-currentPlayersInit(cp,p1,p2)
-#game(cp)
-con = sqlite3.connect("db.sqlite")
-game(cp,con)
-"""

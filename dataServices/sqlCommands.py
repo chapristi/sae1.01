@@ -30,7 +30,9 @@ def register(name : str, password : str, conn : Connection)->Player:
     try:
         cur = conn.cursor()
         query = f"INSERT INTO PLAYER (name,password,scoreRiddle,scoreTtt,scoreMatches,scoreP4) VALUES (?,?,0,0,0,0)"
+        #execute la requete sql
         cur.execute(query,(name,password))
+        #rend permanent les changements dans la base de données
         conn.commit()
         query = f"SELECT id,name,scoreRiddle,scoreTtt,scoreMatches,scoreP4 FROM PLAYER WHERE id = ?"
         res = cur.execute(
@@ -40,7 +42,7 @@ def register(name : str, password : str, conn : Connection)->Player:
         playerElements  = res.fetchone()
         if playerElements == None:
             return player
-        playerInit(player, int(playerElements[0]), playerElements[1],int(playerElements[2]), int(playerElements[3]), int(playerElements[4]),int(playerElements[5]))
+        playerInit(player, int(playerElements[0]), playerElements[1])
         return player
     except Exception:
         player.id = -1
@@ -85,12 +87,14 @@ def connect(name :str, password : str , conn : Connection) -> Player:
                         name,
                         password
                     ))
+        #recupere un seul element dans la base de données
         playerElements  = res.fetchone()
         if playerElements == None:
             return player
-        playerInit(player, int(playerElements[0]), playerElements[1],int(playerElements[2]), int(playerElements[3]), int(playerElements[4]),int(playerElements[5]))
+        playerInit(player, int(playerElements[0]), playerElements[1])
         return player
     except Exception:
+        player.id = -1
         return player
     finally:
         if cur is not None:

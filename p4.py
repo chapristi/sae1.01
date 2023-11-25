@@ -47,7 +47,7 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
     j = 0
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
-
+    #verification verticale
     while i < gameP4.sizeY - 3 and not isWin:
         j = 0
         while j < gameP4.sizeX:
@@ -58,6 +58,7 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
         i += 1
 
     i = 0
+    #verification horizontale
     while i < gameP4.sizeY and not isWin:
         j = 0
         while j < gameP4.sizeX - 3 and not isWin:
@@ -68,6 +69,7 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
         i += 1
 
     i = 0
+    #verification des diagonales
     while i < gameP4.sizeY and not isWin:
         j = 0
         while j < gameP4.sizeX and not isWin:
@@ -238,36 +240,3 @@ def game(currentPlayers : CurrentPlayers, conn : Connection):
             continue
         currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
     pointsDistribution(gameP4, currentPlayer, currentPlayers, conn)
-
-"""
-#data set de test tout ca est fait dans le main normalement
-cp : CurrentPlayers
-p1 :Player
-p2: Player
-p1 = Player()
-p2 = Player()
-
-p1.id = 1
-p1.name = "Louis"
-p1.scoreMatches = 10
-p1.scoreP4 = 10
-p1.scoreRiddle = 10
-p1.scoreTtt  = 10
-
-p2.id = 10
-p2.name = "Lorie"
-p2.scoreMatches = 10
-p2.scoreP4 = 10
-p2.scoreRiddle = 10
-p2.scoreTtt  = 10
-cp = CurrentPlayers()
-cp.player1 = p1
-cp.player2 = p2
-currentPlayersInit(cp,p1,p2)
-#game(cp)
-gameP4 : GameP4
-gameP4 = GameP4()
-gameP4Init(gameP4)
-con = sqlite3.connect("db.sqlite")
-game(cp,con)
-"""
