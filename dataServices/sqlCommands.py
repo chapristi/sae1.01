@@ -51,9 +51,6 @@ def register(name : str, password : str, conn : Connection)->Player:
         if cur is not None:
             cur.close()
 
-
-
-
 def connect(name :str, password : str , conn : Connection) -> Player:
     """
         Connecte un joueur en vérifiant le nom d'utilisateur et le mot de passe dans la base de données.

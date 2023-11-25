@@ -43,7 +43,7 @@ def displayResult(gameRiddle : GameRiddle, looser: Player, winner: Player)->None
     print(setColorYellow("Merci de votre participation (" + looser.name + "), vous recevez " + str(gameRiddle.pointLoose) + " points"))
 
 
-def guess_number(gameRiddle : GameRiddle, information : str, choice : int) -> bool:
+def guessNumber(gameRiddle : GameRiddle, information : str, choice : int) -> bool:
     """
     Vérifie si le joueur 1 ment sur le résultat de la devinette dans le jeu de devinette (Riddle).
 
@@ -114,7 +114,7 @@ def game(currentPlayers: CurrentPlayers, conn : Connection)->None:
         while not isDigit(choice):
             choice = input("(" + setColorGreen(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
         information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
-        while guess_number(gameRiddle,information,int(choice)):
+        while guessNumber(gameRiddle,information,int(choice)):
             information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         if int(choice) == gameRiddle.numberToGuess:
             winner = currentPlayers.player2
