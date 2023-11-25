@@ -21,7 +21,6 @@ def displayStartingMenu()->None:
     """
     print(setColorGreen("Bienvenue à vous dans le jeu du Morpion"))
     print(setColorGreen("REGLES DU JEU \n 1. À chaque joueur sera affecté une jeton \n 2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. \n 3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. \n 4. AA chaque joueur sera affecté une jeton"))
-    print(setColorGreen("Chargement..."))
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -97,7 +96,7 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     return isWin
 
 
-def checkDraw(gameTicTacToe : GameTicTacToe)->bool:
+def checkDraw(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     """
         Vérifie si la partie est un match nul (matche null).
 
@@ -116,7 +115,8 @@ def checkDraw(gameTicTacToe : GameTicTacToe)->bool:
     i = 0
     j = 0
     isDraw = True
-    
+    if checkWin(gameTicTacToe,currentPlayer):
+        isDraw = False
     while i <  gameTicTacToe.sizeY and isDraw:
         while j < gameTicTacToe.sizeX and isDraw:
             if gameTicTacToe.plate[i][j] == 0 :
@@ -215,7 +215,7 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
             print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
             continue
         displayGrid(gameTicTacToe, currentPlayers)
-        if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe):
+        if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
             finished = True
             continue
         currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)

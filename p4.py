@@ -22,7 +22,6 @@ def displayStartingMenu()->None:
 
     print(setColorGreen("Bienvenue à vous dans le jeu du puissance 4"))
     print (setColorGreen("REGLES DU JEU \n 1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille. \n 2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. \n 3. Le premier joueur à aligner 4 de ses pions a gagné !"))
-    print(setColorGreen("Chargement..."))
 
 def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
     """
@@ -233,10 +232,10 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
             choice = input(setColorYellow("choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
         if(not play(gameP4,int(choice),currentPlayer.playerNumber)):
             print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-            continue
-        displayGrid(gameP4,currentPlayers)
-        if checkWin(gameP4,currentPlayer) or checkDraw(gameP4,currentPlayer):
-            finished = True
-            continue
-        currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
+        else:    
+            displayGrid(gameP4,currentPlayers)
+            if checkWin(gameP4,currentPlayer) or checkDraw(gameP4,currentPlayer):
+                finished = True
+            else:
+                currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
     pointsDistribution(gameP4, currentPlayer, currentPlayers, conn)
