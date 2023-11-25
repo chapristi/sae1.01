@@ -77,9 +77,11 @@ def drawMatches(nb : int) -> None:
             None
     """
     matches : list[str]
-    i: int
+    i : int
+    j : int
 
     i = 0
+    j = 0
     matches = [
          setColorRed("█"),
          setColorYellow ("█"),
@@ -89,8 +91,10 @@ def drawMatches(nb : int) -> None:
     ]
     for i in range(0,5):
         print()
-        for _ in range(0,nb):
+        while j < nb:
             print(matches[i] + " ",end="")
+            j+=1
+        j = 0
     print()
 
 
