@@ -1,29 +1,14 @@
-from entity.gameP4 import GameP4,gameP4Init
-from entity.player import CurrentPlayers,Player
+from entity.gameP4 import GameP4, gameP4Init
+from entity.player import CurrentPlayers, Player
 from helpers.colors import *
 from helpers.inputChecker import isDigit
 from dataServices.sqlCommands import addPoint
 from sqlite3 import Connection
 from helpers.helperPlayer import getOtherPlayer
+from helpers.startingMenu import displayStartingMenu
 
-def displayStartingMenu()->None:
-    """
-        Affiche le menu de démarrage du jeu Puissance 4.
 
-        Cette fonction affiche le menu de démarrage du jeu Puissance 4, y compris un message de bienvenue, les règles du jeu et un message de chargement.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-    """
-
-    print(setColorGreen("Bienvenue à vous dans le jeu du puissance 4"))
-    print (setColorGreen("REGLES DU JEU \n 1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille. \n 2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. \n 3. Le premier joueur à aligner 4 de ses pions a gagné !"))
-
-def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
+def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
     """
         Vérifie si le joueur actuel a gagné dans le Puissance 4.
 
@@ -37,53 +22,53 @@ def checkWin(gameP4 : GameP4, currentPlayer : Player)->bool:
             bool: True si le joueur actuel a gagné, False sinon.
 
     """
-    i : int
-    j : int
-    isWin : bool
-    currentPlayerNumber : int
+    i: int
+    j: int
+    isWin: bool
+    currentPlayerNumber: int
 
     i = 0
     j = 0
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
-    #verification verticale
+    # verification verticale
     while i < gameP4.sizeY - 3 and not isWin:
         j = 0
         while j < gameP4.sizeX:
             if (gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j] == currentPlayerNumber
-                and gameP4.plate[i+2][j] == currentPlayerNumber and gameP4.plate[i+3][j] == currentPlayerNumber):
+                    and gameP4.plate[i+2][j] == currentPlayerNumber and gameP4.plate[i+3][j] == currentPlayerNumber):
                 isWin = True
             j += 1
         i += 1
 
     i = 0
-    #verification horizontale
+    # verification horizontale
     while i < gameP4.sizeY and not isWin:
         j = 0
         while j < gameP4.sizeX - 3 and not isWin:
             if (gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i][j+1] == currentPlayerNumber
-                and gameP4.plate[i][j+2] == currentPlayerNumber and gameP4.plate[i][j+3] == currentPlayerNumber):
+                    and gameP4.plate[i][j+2] == currentPlayerNumber and gameP4.plate[i][j+3] == currentPlayerNumber):
                 isWin = True
             j += 1
         i += 1
 
     i = 0
-    #verification des diagonales
+    # verification des diagonales
     while i < gameP4.sizeY and not isWin:
         j = 0
         while j < gameP4.sizeX and not isWin:
             if (j >= 3 and i <= 2 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j-1] == currentPlayerNumber
-                and gameP4.plate[i+2][j-2] == currentPlayerNumber and gameP4.plate[i+3][j-3] == currentPlayerNumber):
+                    and gameP4.plate[i+2][j-2] == currentPlayerNumber and gameP4.plate[i+3][j-3] == currentPlayerNumber):
                 isWin = True
             if (i <= 2 and j <= 5 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j+1] == currentPlayerNumber
-                and gameP4.plate[i+2][j+2] == currentPlayerNumber and gameP4.plate[i+3][j+3] == currentPlayerNumber):
+                    and gameP4.plate[i+2][j+2] == currentPlayerNumber and gameP4.plate[i+3][j+3] == currentPlayerNumber):
                 isWin = True
             j += 1
-        i += 1  
+        i += 1
     return isWin
 
 
-def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection)->None:
+def pointsDistribution(gameP4: GameP4, curPlayer: Player, curPlayers: CurrentPlayers, conn: Connection) -> None:
     """
         Gère la distribution des points à la fin de la partie de Puissance 4.
 
@@ -99,20 +84,24 @@ def pointsDistribution(gameP4: GameP4, curPlayer : Player, curPlayers : CurrentP
             None
 
     """
-    if checkWin(gameP4,curPlayer):
-        print(setColorGreen("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
-        addPoint(curPlayer.id,gameP4.pointWin,conn,gameP4.colName)
+    if checkWin(gameP4, curPlayer):
+        print(setColorGreen("🙂 Bravo c'est " 
+             + "(" + curPlayer.name  +") "+ " qui l'emporte"))
+        addPoint(curPlayer.id, gameP4.pointWin, conn, gameP4.colName)
         if curPlayer.id == curPlayers.player1.id:
-            addPoint(curPlayers.player2.id,gameP4.pointLoose,conn,gameP4.colName)
+            addPoint(curPlayers.player2.id,
+                     gameP4.pointLoose, conn, gameP4.colName)
         else:
-            addPoint(curPlayers.player1.id,gameP4.pointLoose,conn,gameP4.colName)
+            addPoint(curPlayers.player1.id,
+                     gameP4.pointLoose, conn, gameP4.colName)
     else:
-        print(setColorGreen("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameP4.pointDraw) + " points"))
-        addPoint(curPlayers.player1.id,gameP4.pointDraw,conn,gameP4.colName)
-        addPoint(curPlayers.player2.id, gameP4.pointDraw,conn,gameP4.colName)
+        print(setColorGreen("🙂 Bravo une egalité parfaite  "+ curPlayers.player1.name + " et  "
+             + curPlayers.player2.name + " vous remportez " + str(gameP4.pointDraw) + " points"))
+        addPoint(curPlayers.player1.id, gameP4.pointDraw, conn, gameP4.colName)
+        addPoint(curPlayers.player2.id, gameP4.pointDraw, conn, gameP4.colName)
 
 
-def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
+def checkDraw(gameP4: GameP4, currPlayer: Player) -> bool:
     """
         Vérifie s'il y a égalité dans la partie de Puissance 4.
 
@@ -125,20 +114,21 @@ def checkDraw(gameP4 : GameP4, currPlayer : Player)->bool:
         Returns:
             bool: True s'il y a égalité, False sinon.
     """
-    i : int
-    j : int
+    i: int
+    j: int
     isDraw: bool
 
     isDraw = True
-    if checkWin(gameP4,currPlayer):
+    if checkWin(gameP4, currPlayer):
         return not isDraw
-    for i in range(0,gameP4.sizeY):
+    for i in range(0, gameP4.sizeY):
         for j in range(0, gameP4.sizeX):
             if gameP4.plate[i][j] == 0:
-                isDraw  = False
+                isDraw = False
     return isDraw
 
-def play(gameP4 : GameP4, column :int, number : int)->bool:
+
+def play(gameP4: GameP4, column: int, number: int) -> bool:
     """
         Cette fonction permet à un joueur de jouer un pion dans la colonne spécifiée.
 
@@ -150,21 +140,20 @@ def play(gameP4 : GameP4, column :int, number : int)->bool:
         Returns:
             bool: True si le coup a été joué avec succès, False sinon.
     """
- 
-    i : int
-    canPlay : bool
+
+    i: int
+    canPlay: bool
 
     canPlay = False
     i = 0
-    for i in range(gameP4.sizeY - 1 ,-1,-1) :
-        if gameP4.plate[i][column-1]  == 0 and not canPlay:
+    for i in range(gameP4.sizeY - 1, -1, -1):
+        if gameP4.plate[i][column-1] == 0 and not canPlay:
             gameP4.plate[i][column-1] = number
             canPlay = True
     return canPlay
 
-     
-    
-def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
+
+def displayGrid(gameP4: GameP4, currentPLayers: CurrentPlayers) -> None:
     """
         Affiche la grille de jeu du Puissance 4.
 
@@ -177,30 +166,30 @@ def displayGrid(gameP4 : GameP4, currentPLayers  : CurrentPlayers)->None:
         Returns:
             None
     """
-    i : int
-    j : int
+    i: int
+    j: int
 
-    i = 0 
+    i = 0
     j = 0
-    print("  " ,end="")
-    for i in range(0,gameP4.sizeX):
+    print("  ", end="")
+    for i in range(0, gameP4.sizeX):
         print(setColorRed(str(i+1)), end="    ")
     print()
-    for i in range(0,gameP4.sizeY):
+    for i in range(0, gameP4.sizeY):
         print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
-        print(setColorBlue("|"),end="")
-        for j in range(0,gameP4.sizeX):
+        print(setColorBlue("|"), end="")
+        for j in range(0, gameP4.sizeX):
             if gameP4.plate[i][j] == currentPLayers.player1.playerNumber:
-                print(f" {gameP4.player1Pawn}  "+setColorBlue("|"),end="")
+                print(f" {gameP4.player1Pawn}  "+setColorBlue("|"), end="")
             elif gameP4.plate[i][j] == currentPLayers.player2.playerNumber:
-                print(f" {gameP4.player2Pawn}  "+setColorBlue("|"),end="")
+                print(f" {gameP4.player2Pawn}  "+setColorBlue("|"), end="")
             else:
-                print(f"    "+setColorBlue("|"),end="")
+                print(f"    "+setColorBlue("|"), end="")
         print()
     print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
 
 
-def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
+def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
     """
         Gère le déroulement d'une partie de Puissance 4.
 
@@ -213,29 +202,36 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
         Returns:
             None
     """
-    gameP4 : GameP4
-    finished : bool
-    currentPlayer : Player
-    choice : str
+    gameP4: GameP4
+    finished: bool
+    currentPlayer: Player
+    choice: str
 
     finished = False
     gameP4 = GameP4()
     gameP4Init(gameP4)
-    displayStartingMenu()
+    displayStartingMenu("Puissance 4", [
+        "REGLES DU JEU :",
+        "1. A votre tour, insérez l’un de vos pions par le haut dans n’importe quelle colonne de la grille.",
+        "2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. ",
+        "3. Le premier joueur à aligner 4 de ses pions a gagné !"
+    ])
     print("vous allez joueur sur cette grille")
-    displayGrid(gameP4,currentPlayers)
+    displayGrid(gameP4, currentPlayers)
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+currentPlayer.name + ")") + " à toi de jouer")
         choice = input("choisi la collonne ou tu souhaites deposer ton pion")
-        while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8 :
-            choice = input(setColorYellow("choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
-        if(not play(gameP4,int(choice),currentPlayer.playerNumber)):
-            print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-        else:    
-            displayGrid(gameP4,currentPlayers)
-            if checkWin(gameP4,currentPlayer) or checkDraw(gameP4,currentPlayer):
+        while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8:
+            choice = input(setColorYellow(
+                "choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
+        if (not play(gameP4, int(choice), currentPlayer.playerNumber)):
+            print(setColorRed(
+                f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+        else:
+            displayGrid(gameP4, currentPlayers)
+            if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):
                 finished = True
             else:
-                currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
+                currentPlayer = getOtherPlayer(currentPlayers, currentPlayer)
     pointsDistribution(gameP4, currentPlayer, currentPlayers, conn)
