@@ -19,3 +19,4 @@ def displayStartingMenu(gameName: str, rules: list[str]) -> None:
     # Affiche chaque règle du jeu en vert
     for i in range(0, len(rules)):
         print(setColorGreen(rules[i]))
+    print()
