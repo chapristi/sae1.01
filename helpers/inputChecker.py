@@ -22,6 +22,3 @@ def isDigit(input : str) -> bool:
         if input[i] not in numbers: isDigit = False
         i = i+1
     return isDigit
-
-
-
