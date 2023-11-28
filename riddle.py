@@ -43,12 +43,12 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
             None
     """
     gameRiddle : GameRiddle
-    gameRiddle = GameRiddle()
     information : str
     winningInformations : WinningInformations
     winner: Player
     choice : str
-
+    
+    gameRiddle = GameRiddle()
     winningInformations = WinningInformations()
     displayStartingMenu("Jeu des devinettes", [
         "REGLES DU JEU :" ,

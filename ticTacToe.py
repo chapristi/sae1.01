@@ -63,7 +63,6 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     currentPlayerNumber : int
 
     i = 0
-  
     isWin = False
     currentPlayerNumber = currentPlayer.playerNumber
     #verification horizontale
@@ -131,6 +130,7 @@ def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choic
 
     """
     canPlay : bool
+
     canPlay = False
     if gameTicTacToe.plate[choiceY -1][choiceX -1] == 0:
         gameTicTacToe.plate[choiceY -1][choiceX -1] = currentPlayer.playerNumber

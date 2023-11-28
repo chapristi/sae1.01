@@ -26,7 +26,6 @@ def register(name : str, password : str, conn : Connection)->Player:
     player = Player()
     player.id = -1
     cur  = None
-
     try:
         cur = conn.cursor()
         query = f"INSERT INTO PLAYER (name,password,scoreRiddle,scoreTtt,scoreMatches,scoreP4) VALUES (?,?,0,0,0,0)"
@@ -72,10 +71,10 @@ def connect(name :str, password : str , conn : Connection) -> Player:
     cur: Cursor | None
     playerElements : list[str] | None
     player : Player
+
     player = Player()
     player.id = -1
     cur = None
-
     try :
         cur = conn.cursor()
         query = f"SELECT id,name,scoreRiddle,scoreTtt,scoreMatches, scoreP4 FROM PLAYER WHERE name = ? AND password = ?"
@@ -119,6 +118,7 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
     """
     cur : Cursor | None
     query : str
+
     cur  = None
     try:
         cur = conn.cursor()
@@ -155,6 +155,7 @@ def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
     res : Cursor 
     cur: Cursor | None
     query : str
+    
     playersElements : list[list[str]]
     playersElements = list(list())
     cur = None

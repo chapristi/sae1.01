@@ -12,11 +12,12 @@ def isDigit(input : str) -> bool:
     isDigit : bool
     i : int
 
-    if input == "":
-        return False
     numbers = "0123456789"
     isDigit = True
     i  = 0 
+    if input == "":
+        return False
+  
     while i < len(input) and isDigit:
         if input[i] not in numbers: isDigit = False
         i = i+1

@@ -28,7 +28,6 @@ def leaderBoardN(name: str, collName:str, conn : Connection)->None:
         print(f"{player[0]}{space * (5 - len(str(player[0])))} "
                 f"{player[1]}{space * (15 - len(str(player[1])))} "
                 f"{player[2]}{space * (10 - len(str(player[2])))}")
-
     print()
 
 

@@ -27,6 +27,7 @@ def drawMatches(nb: int) -> None:
 
     i = 0
     j = 0
+    # la structure d'une allumette
     matches = [
         setColorRed("█"),
         setColorYellow("█"),
