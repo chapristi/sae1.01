@@ -1,19 +1,21 @@
-from colors import *
-def displayStartingMenu(gameName:  str, rules: list[str])->None:
+from helpers.colors import *
+def displayStartingMenu(gameName: str, rules: list[str]) -> None:
     """
-        Affiche le menu de démarrage du jeu Puissance 4.
+    Affiche le menu de démarrage du jeu.
 
-        Cette fonction affiche le menu de démarrage du jeu Puissance 4, y compris un message de bienvenue, les règles du jeu et un message de chargement.
+    Args:
+        gameName (str): Nom du jeu à afficher dans le message de bienvenue.
+        rules (list[str]): Liste des règles du jeu à afficher.
 
-        Args:
-            None
-
-        Returns:
-            None
-
+    Returns:
+        None
     """
-    i : int
+    # Variable de boucle
+    i: int
 
+    # Affiche le message de bienvenue avec le nom du jeu en vert
     print(setColorGreen(f"Bienvenue à vous dans le jeu du {gameName}"))
-    for i in range(0,len(rules)) :
+
+    # Affiche chaque règle du jeu en vert
+    for i in range(0, len(rules)):
         print(setColorGreen(rules[i]))

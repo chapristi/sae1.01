@@ -2,11 +2,11 @@ from entity.gameP4 import GameP4, gameP4Init
 from entity.player import CurrentPlayers, Player
 from helpers.colors import *
 from helpers.inputChecker import isDigit
-from dataServices.sqlCommands import addPoint
+from entity.winningInformations import *
 from sqlite3 import Connection
 from helpers.helperPlayer import getOtherPlayer
 from helpers.startingMenu import displayStartingMenu
-
+from helpers.pointRepartition import pointsDistribution
 
 def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
     """
@@ -68,37 +68,6 @@ def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
     return isWin
 
 
-def pointsDistribution(gameP4: GameP4, curPlayer: Player, curPlayers: CurrentPlayers, conn: Connection) -> None:
-    """
-        Gère la distribution des points à la fin de la partie de Puissance 4.
-
-        Cette fonction détermine le gagnant de la partie et distribue les points en conséquence. Elle affiche également un message indiquant le résultat de la partie.
-
-        Args:
-            gameP4 (GameP4): L'instance de la classe GameP4 représentant le jeu en cours.
-            curPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
-            curPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les deux joueurs.
-            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
-
-        Returns:
-            None
-
-    """
-    if checkWin(gameP4, curPlayer):
-        print(setColorGreen("🙂 Bravo c'est " 
-             + "(" + curPlayer.name  +") "+ " qui l'emporte"))
-        addPoint(curPlayer.id, gameP4.pointWin, conn, gameP4.colName)
-        if curPlayer.id == curPlayers.player1.id:
-            addPoint(curPlayers.player2.id,
-                     gameP4.pointLoose, conn, gameP4.colName)
-        else:
-            addPoint(curPlayers.player1.id,
-                     gameP4.pointLoose, conn, gameP4.colName)
-    else:
-        print(setColorGreen("🙂 Bravo une egalité parfaite  "+ curPlayers.player1.name + " et  "
-             + curPlayers.player2.name + " vous remportez " + str(gameP4.pointDraw) + " points"))
-        addPoint(curPlayers.player1.id, gameP4.pointDraw, conn, gameP4.colName)
-        addPoint(curPlayers.player2.id, gameP4.pointDraw, conn, gameP4.colName)
 
 
 def checkDraw(gameP4: GameP4, currPlayer: Player) -> bool:
@@ -206,9 +175,11 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
     finished: bool
     currentPlayer: Player
     choice: str
+    winningInformations : WinningInformations
 
     finished = False
     gameP4 = GameP4()
+    winningInformations = WinningInformations()
     gameP4Init(gameP4)
     displayStartingMenu("Puissance 4", [
         "REGLES DU JEU :",
@@ -234,4 +205,5 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
                 finished = True
             else:
                 currentPlayer = getOtherPlayer(currentPlayers, currentPlayer)
-    pointsDistribution(gameP4, currentPlayer, currentPlayers, conn)
+    winningInformationsInit(winningInformations, gameP4.colName,gameP4.pointDraw,gameP4.pointWin,gameP4.pointLoose,checkDraw(gameP4,currentPlayer))
+    pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)

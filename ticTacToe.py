@@ -5,22 +5,10 @@ from entity.gameTicTacToe import *
 from sqlite3 import Connection
 from helpers.inputChecker import isDigit
 from helpers.helperPlayer import getOtherPlayer
-from dataServices.sqlCommands import addPoint
+from helpers.startingMenu import displayStartingMenu
+from helpers.pointRepartition import pointsDistribution
+from entity.winningInformations import *
 
-def displayStartingMenu()->None:
-    """
-        Affiche le menu de démarrage du jeu du Morpion.
-
-        Cette fonction affiche un menu de démarrage du jeu du Morpion, y compris les règles du jeu et un message de chargement.
-
-        Args:
-            Aucun.
-
-        Returns:
-            None
-    """
-    print(setColorGreen("Bienvenue à vous dans le jeu du Morpion"))
-    print(setColorGreen("REGLES DU JEU \n 1. À chaque joueur sera affecté une jeton \n 2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. \n 3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. \n 4. AA chaque joueur sera affecté une jeton"))
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -149,32 +137,6 @@ def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choic
         canPlay = True
     return canPlay
 
-def pointsDistribution(gameTicTacToe: GameTicTacToe, curPlayer : Player, curPlayers : CurrentPlayers, conn : Connection)->None:
-    """
-        Distribue les points en fonction du résultat de la partie.
-
-        Cette fonction distribue les points aux joueurs en fonction du résultat de la partie (victoire ou match nul).
-
-        Args:
-            gameTicTacToe (GameTicTacToe): L'instance de la classe GameTicTacToe représentant le jeu.
-            curPlayer (Player): L'instance de la classe Player correspondant au joueur actuel.
-            curPlayers (CurrentPlayers): L'instance de la classe CurrentPlayers contenant les joueurs actuels.
-            conn (Connection): L'objet de connexion à la base de données pour enregistrer les points.
-
-        Returns:
-            None
-    """
-    if checkWin(gameTicTacToe,curPlayer):
-        print(setColorGreen("🙂 Bravo c'est " + "(" + curPlayer.name +")"+ " qui l'emporte"))
-        addPoint(curPlayer.id,gameTicTacToe.pointWin,conn,gameTicTacToe.colName)
-        if curPlayer.id == curPlayers.player1.id:
-            addPoint(curPlayers.player2.id,gameTicTacToe.pointLoose,conn,gameTicTacToe.colName)
-        else:
-            addPoint(curPlayers.player1.id,gameTicTacToe.pointLoose,conn,gameTicTacToe.colName)
-    else:
-        print(setColorGreen("🙂 Bravo une egalité parfaite "+ curPlayers.player1.name + " et "+ curPlayers.player2.name + " vous remportez " + str(gameTicTacToe.pointDraw) + " points"))
-        addPoint(curPlayers.player1.id,gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
-        addPoint(curPlayers.player2.id, gameTicTacToe.pointDraw,conn,gameTicTacToe.colName)
 
 def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     """
@@ -191,6 +153,7 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
             None
     """
     gameTicTacToe : GameTicTacToe
+    winningInformations : WinningInformations
     finished : bool
     currentPlayer : Player
     choiceX : str
@@ -198,8 +161,15 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
 
     finished = False
     gameTicTacToe = GameTicTacToe()
+    winningInformations = WinningInformations()
     gameTicTacToeInit(gameTicTacToe)
-    displayStartingMenu()
+    displayStartingMenu("Morpion",[
+        "REGLES DU JEU :",
+        "1. À chaque joueur sera affecté une jeton ",
+        "2. Les joueurs placent à tour de rôle un jeton sur une case du quadrillage. ",
+        "3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. ",
+        "4. AA chaque joueur sera affecté une jeton"
+    ])
     print("vous allez joueur sur cette grille")
     displayGrid(gameTicTacToe,currentPlayers)
     currentPlayer = currentPlayers.player1
@@ -219,5 +189,5 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
                 finished = True
             else:
                 currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
-    pointsDistribution(gameTicTacToe, currentPlayer, currentPlayers, conn)
-    
+    winningInformationsInit(winningInformations, gameTicTacToe.colName,gameTicTacToe.pointDraw,gameTicTacToe.pointWin,gameTicTacToe.pointLoose,checkDraw(gameTicTacToe,currentPlayer))
+    pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)    
