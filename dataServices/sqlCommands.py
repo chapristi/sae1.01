@@ -27,6 +27,7 @@ def register(name : str, password : str, conn : Connection)->Player:
     player.id = -1
     cur  = None
     try:
+        #creation du curseur de base de données
         cur = conn.cursor()
         query = f"INSERT INTO PLAYER (name,password,scoreRiddle,scoreTtt,scoreMatches,scoreP4) VALUES (?,?,0,0,0,0)"
         #execute la requete sql
@@ -38,6 +39,7 @@ def register(name : str, password : str, conn : Connection)->Player:
                     query,(
                         str(cur.lastrowid),
                 ))
+        #recuperer un seul enregistrement
         playerElements  = res.fetchone()
         if playerElements == None:
             return player
@@ -48,6 +50,7 @@ def register(name : str, password : str, conn : Connection)->Player:
         return player
     finally:
         if cur is not None:
+            #on ferme le curseur dans tout les cas
             cur.close()
 
 def connect(name :str, password : str , conn : Connection) -> Player:
@@ -76,6 +79,7 @@ def connect(name :str, password : str , conn : Connection) -> Player:
     player.id = -1
     cur = None
     try :
+        #creation du curseur de base de données
         cur = conn.cursor()
         query = f"SELECT id,name,scoreRiddle,scoreTtt,scoreMatches, scoreP4 FROM PLAYER WHERE name = ? AND password = ?"
         res = cur.execute(
@@ -94,6 +98,7 @@ def connect(name :str, password : str , conn : Connection) -> Player:
         return player
     finally:
         if cur is not None:
+            #on ferme le curseur dans tout les cas
             cur.close()
     
     
@@ -114,13 +119,13 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
 
         Returns:
             bool: True si l'ajout de points s'est déroulé avec succès, False en cas d'erreur.
-
     """
     cur : Cursor | None
     query : str
 
     cur  = None
     try:
+        #creation du curseur de base de données
         cur = conn.cursor()
         query = f"UPDATE PLAYER SET {game} = {game} + ? WHERE id = ?;"
         cur.execute(
@@ -129,12 +134,14 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
                 id
             )
         )
+        #rend permanent les changements dans la base de données
         conn.commit()
         return True
     except sqliteErr:
         return False
     finally:
         if cur is not None:
+            #on ferme le curseur dans tout les cas
             cur.close()
     
 def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
@@ -150,27 +157,29 @@ def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
         Returns:
             list[list[str]]: Une liste de listes contenant les informations des meilleurs joueurs, y compris leur ID, nom et score dans la colonne spécifiée.
                             En cas d'erreur, une liste vide est renvoyée.
-
     """
     res : Cursor 
     cur: Cursor | None
     query : str
-    
+
     playersElements : list[list[str]]
     playersElements = list(list())
     cur = None
     try:
+        #creation du curseur de base de données
         cur = conn.cursor()
         query = f"SELECT id,name, {collName} as score FROM PLAYER ORDER BY score DESC LIMIT 10;"
         res = cur.execute(
-                    query,(     
-                    ))
+            query,()
+        )
+        #recuperer tout les enregistrements
         playersElements  = res.fetchall()
         return playersElements
     except sqliteErr:
         return playersElements
     finally:
         if cur is not None:
+            #on ferme le curseur dans tout les cas
             cur.close()
 
 

@@ -88,6 +88,7 @@ def checkDraw(gameP4: GameP4, currPlayer: Player) -> bool:
     isDraw: bool
 
     isDraw = True
+    # on regarde si il y a une victoire car si y a une victoire il n'y a pas de 
     if checkWin(gameP4, currPlayer):
         return not isDraw
     for i in range(0, gameP4.sizeY):

@@ -12,6 +12,7 @@ def isDigit(input : str) -> bool:
     isDigit : bool
     i : int
 
+    #ensemble des chiffres
     numbers = "0123456789"
     isDigit = True
     i  = 0 
@@ -19,6 +20,7 @@ def isDigit(input : str) -> bool:
         return False
   
     while i < len(input) and isDigit:
-        if input[i] not in numbers: isDigit = False
+        if input[i] not in numbers:
+            isDigit = False
         i = i+1
     return isDigit
