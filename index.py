@@ -71,7 +71,6 @@ if __name__ == "__main__":
             player2 = register(username,password,con)
             if player2.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
-
         else:
             print(setColorRed("Ce choix n'existe pas"))
             
@@ -101,4 +100,5 @@ if __name__ == "__main__":
             case _:
                 print(setColorRed("Ce choix n'existe pas"))
         changePlayer(currentPlayers)
+    #fermeture de la connection à la base de données.
     con.close()
