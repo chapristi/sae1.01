@@ -5,8 +5,24 @@ from helpers.colors import *
 from dataServices.sqlCommands import *
 from helpers.helperPlayer import getOtherPlayer
 
-def pointsDistribution( winningInformations : WinningInformations,currentPlayers : CurrentPlayers,
-    currentPlayer : Player ,conn : Connection)->None:
+def pointsDistribution(
+        winningInformations : WinningInformations,
+        currentPlayers : CurrentPlayers,
+        currentPlayer : Player ,
+        conn : Connection
+    )->None:
+    """
+        Distribue les points en fonction des résultats du jeu.
+
+        Args:
+            winningInformations (WinningInformations): Les informations sur la distribution des points.
+            currentPlayers (CurrentPlayers): Les joueurs actuels du jeu.
+            currentPlayer (Player): Le joueur qui a remporté le jeu.
+            conn (Connection): L'objet de connexion à la base de données.
+
+        Returns:
+            None
+    """
 
     otherPlayer : Player
 
