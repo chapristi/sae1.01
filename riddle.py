@@ -31,7 +31,7 @@ def guessNumber(gameRiddle : GameRiddle, information : str, choice : int) -> boo
     return isLiar
 
 
-def game(currentPlayers: CurrentPlayers, conn : Connection)->None:
+def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
     """
         Cette fonction gère le déroulement du jeu de devinette, où un joueur doit deviner un nombre.
 
@@ -50,15 +50,13 @@ def game(currentPlayers: CurrentPlayers, conn : Connection)->None:
     choice : str
 
     winningInformations = WinningInformations()
-    displayStartingMenu("Jeu des devinettes",[
+    displayStartingMenu("Jeu des devinettes", [
         "REGLES DU JEU :" ,
         "1. Le joueur 1 choisi le nombre que le joueur 2 va devoir trouvé se situant entre (0 et 200) ainsi que le nombre de tentative max que le joueur deux a pour trouver (> 1) le nombre ",
         "2. Le joueur deux donne alors un nombre qui pense etre le bon ",
         "3. Le joueur 2 indique au joueur un si le nombre donné est (trop petit trop grand ou c'est gagné)",
         "4. Le jeu s'arrete quand le joeur 2 à trouvé le bon nombre dans le nombre de coups imparti ou quand son nombre de tentative a depasser le nombre de tentatives maximale"
     ])
-
-    
     winner = currentPlayers.player1
     gameRiddleInit(gameRiddle,currentPlayers)
     while not gameRiddle.isOver:

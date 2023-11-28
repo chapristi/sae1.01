@@ -4,7 +4,7 @@ class Player:
     playerNumber : int
     
 
-def playerInit(player : Player, id : int, name : str)->None:
+def playerInit(player : Player,id : int,name : str)->None:
     """
         Initialise un objet joueur avec les informations fournies.
 

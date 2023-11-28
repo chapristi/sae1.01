@@ -79,7 +79,7 @@ def checkWin(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
         i += 1
     i = 0
     #verification des diagonales
-    if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2]) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0] == currentPlayer)):
+    if ((gameTicTacToe.plate[0][0] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][2] == currentPlayerNumber) or (gameTicTacToe.plate[0][2] == currentPlayerNumber and gameTicTacToe.plate[1][1] == currentPlayerNumber and  gameTicTacToe.plate[2][0] == currentPlayerNumber)):
         isWin = True
     return isWin
 
@@ -182,9 +182,10 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
         while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
             choiceY = input(setColorYellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
         if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
-            print(setColorRed(f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-        else:    
+            print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+        else:
             displayGrid(gameTicTacToe, currentPlayers)
+            print(checkWin(gameTicTacToe,currentPlayer))
             if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
                 finished = True
             else:
