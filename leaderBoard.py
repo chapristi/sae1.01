@@ -21,7 +21,7 @@ def leaderBoardN(name: str, collName:str, conn : Connection)->None:
 
     space = " "
     users = getTopUsersByColumn(collName,conn)
-    print(setColorYellow("Leaderboard pour le jeu "+name +":\n"))
+    print(setColorYellow("Leaderboard pour le jeu "+ name +":\n"))
     print("ID    Nom            Score")
     print("-" * 30)
     for player in users:

@@ -7,6 +7,27 @@ from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from helpers.startingMenu import displayStartingMenu
 
+def calcPoints(attempts: int, max_attempts: int, point_win:int) -> int:
+    """
+    Calcule les points en fonction du nombre d'essais et du nombre maximal d'essais autorisé.
+
+    Args:
+        attempts (int): Le nombre d'essais effectués.
+        max_attempts (int): Le nombre maximal d'essais autorisé.
+        point_win (int): Le nombre de points à attribuer en cas de victoire.
+
+    Returns:
+        int: Le nombre de points attribués.
+    """
+    if attempts <= 0 or max_attempts <= 0:
+        return 0  # Éviter la division par zéro
+
+    points = 1 - (max_attempts / attempts)
+    points = min(1, points)  # Limiter le score à 1 au maximum
+    points *= point_win
+
+    return max(1, int(points))  # Assurer un minimum de 1 point attribué
+
 def guessNumber(gameRiddle : GameRiddle, information : str, choice : int) -> bool:
     """
     Vérifie si le joueur 1 ment sur le résultat de la devinette dans le jeu de devinette (Riddle).
@@ -47,7 +68,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
     winningInformations : WinningInformations
     winner: Player
     choice : str
-    
+
     gameRiddle = GameRiddle()
     winningInformations = WinningInformations()
     displayStartingMenu("Jeu des devinettes", [
@@ -73,7 +94,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
         elif gameRiddle.attempts >= gameRiddle.maxAttempts:
             winner = currentPlayers.player1
             gameRiddle.isOver = True
-    winningInformationsInit(winningInformations, gameRiddle.colName,0,gameRiddle.pointWin,gameRiddle.pointLoose,False)
+    winningInformationsInit(winningInformations, gameRiddle.colName,0,calcPoints(gameRiddle.attempts,gameRiddle.maxAttempts,gameRiddle.pointWin),gameRiddle.pointLoose,False)
     pointsDistribution(winningInformations,currentPlayers,winner,conn)
 
    

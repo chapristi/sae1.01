@@ -3,7 +3,7 @@ def isDigit(input : str) -> bool:
         Vérifie si la chaîne de caractères donnée ne contient que des chiffres.
 
         Args:
-            input_str (str): La chaîne de caractères à vérifier.
+            input (str): La chaîne de caractères à vérifier.
 
         Returns:
             bool: True si la chaîne ne contient que des chiffres, False sinon.
