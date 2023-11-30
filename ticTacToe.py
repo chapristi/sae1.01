@@ -28,6 +28,7 @@ def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)-
 
     i = 0 
     j = 0
+    #affichage de l'emplacement des case en x
     print("    ", end="")
     for j in range(gameTicTacToe.sizeY): 
         print(str(j + 1) + "   ", end="")
@@ -35,6 +36,7 @@ def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)-
     for i in range(0,gameTicTacToe.sizeY):
         print("  +" + "---+"*gameTicTacToe.sizeX)
         print(str(i+1)+" |",end="")
+        #affichage de la cage avec un pion si present
         for j in range(0,gameTicTacToe.sizeX):
             if gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber:
                 print(f" {gameTicTacToe.player1Pawn} |",end="")
@@ -102,6 +104,7 @@ def checkDraw(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     i = 0
     j = 0
     isDraw = True
+    #on verifie si le joueur n'a pas gagné car si c'est le cas il n'y a pas d'égalité
     if checkWin(gameTicTacToe,currentPlayer):
         isDraw = False
     while i <  gameTicTacToe.sizeY and isDraw:
@@ -132,9 +135,11 @@ def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choic
     canPlay : bool
 
     canPlay = False
+    #on verifie  que la case comporte bien un 0 si c'est le cas cela veut dire qu'elle est libre
     if gameTicTacToe.plate[choiceY -1][choiceX -1] == 0:
         gameTicTacToe.plate[choiceY -1][choiceX -1] = currentPlayer.playerNumber
         canPlay = True
+    #retourne si le joueur a pu jouer
     return canPlay
 
 
@@ -162,6 +167,7 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     finished = False
     gameTicTacToe = GameTicTacToe()
     winningInformations = WinningInformations()
+    #initialisation du jeu
     gameTicTacToeInit(gameTicTacToe)
     displayStartingMenu("Morpion",[
         "REGLES DU JEU :",
@@ -181,11 +187,13 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
         choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y")
         while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
             choiceY = input(setColorYellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
+        #si le joueur n'a pas pu jouer c'est que la case est déjà occupée
         if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
             print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
         else:
             displayGrid(gameTicTacToe, currentPlayers)
             print(checkWin(gameTicTacToe,currentPlayer))
+            #si il y a une victoire ou une égalité on arrete le jeu 
             if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
                 finished = True
             else:

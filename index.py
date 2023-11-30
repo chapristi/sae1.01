@@ -28,7 +28,7 @@ if __name__ == "__main__":
     player1.id = -1
     player2.id = -1
     currentPlayers = CurrentPlayers()
-
+    #connexion à la base de données
     con = sqlite3.connect("db.sqlite")
 
     print(setColorGreen("Bienvenue à vous! etes vous prets à jouer?"))
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
         else:
             print(setColorRed("Ce choix n'existe pas"))
-            
+    # Initialisation des joueurs qui s'apprêtent à jouer        
     currentPlayersInit(currentPlayers, player1, player2)
     end = False
     while not end:

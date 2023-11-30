@@ -7,7 +7,7 @@ from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from helpers.startingMenu import displayStartingMenu
 
-def calcPoints(attempts: int, max_attempts: int, point_win:int) -> int:
+def calcPoints(attempts: int, maxAttempts: int, pointWin:int) -> int:
     """
     Calcule les points en fonction du nombre d'essais et du nombre maximal d'essais autorisé.
 
@@ -19,12 +19,12 @@ def calcPoints(attempts: int, max_attempts: int, point_win:int) -> int:
     Returns:
         int: Le nombre de points attribués.
     """
-    if attempts <= 0 or max_attempts <= 0:
+    if attempts <= 0 or maxAttempts <= 0:
         return 0  # Éviter la division par zéro
 
-    points = 1 - (max_attempts / attempts)
+    points = 1 - (maxAttempts / attempts)
     points = min(1, points)  # Limiter le score à 1 au maximum
-    points *= point_win
+    points *= pointWin
 
     return max(1, int(points))  # Assurer un minimum de 1 point attribué
 
@@ -79,6 +79,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
         "4. Le jeu s'arrete quand le joeur 2 à trouvé le bon nombre dans le nombre de coups imparti ou quand son nombre de tentative a depasser le nombre de tentatives maximale"
     ])
     winner = currentPlayers.player1
+    #initialisation du jeu
     gameRiddleInit(gameRiddle,currentPlayers)
     while not gameRiddle.isOver:
         gameRiddle.attempts += 1
@@ -86,6 +87,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
         while not isDigit(choice):
             choice = input("(" + setColorGreen(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
         information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
+        #verification si le joueur 1 ment sur le resultat
         while guessNumber(gameRiddle,information,int(choice)):
             information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit), (trop grand) ou (c'est gagné) en fonction du nombre entree")
         if int(choice) == gameRiddle.numberToGuess:

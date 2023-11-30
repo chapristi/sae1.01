@@ -20,6 +20,7 @@ def gameRiddleInit(gameRiddle : GameRiddle, currentPlayers : CurrentPlayers)->No
     
         Args:
             gameRiddle (GameRiddle): variable de type GameRiddle.
+            currentPlayers (CurrentPlayers) les joueurs actuellement en train de jouer
         Returns:
             Rien
     """

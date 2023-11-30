@@ -46,6 +46,7 @@ def register(name : str, password : str, conn : Connection)->Player:
         playerInit(player, int(playerElements[0]), playerElements[1])
         return player
     except sqliteErr:
+        #si une erreur sql je retourne un joueur avec un id à -1
         player.id = -1
         return player
     finally:
@@ -94,6 +95,7 @@ def connect(name :str, password : str , conn : Connection) -> Player:
         playerInit(player, int(playerElements[0]), playerElements[1])
         return player
     except sqliteErr:
+        #si une erreur sql je retourne un joueur avec un id à -1
         player.id = -1
         return player
     finally:
@@ -138,6 +140,7 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
         conn.commit()
         return True
     except sqliteErr:
+        #si une erreur sql je retourne faux 
         return False
     finally:
         if cur is not None:
@@ -176,6 +179,7 @@ def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
         playersElements  = res.fetchall()
         return playersElements
     except sqliteErr:
+        #si une erreur sql je retourne un tableau vide
         return playersElements
     finally:
         if cur is not None:

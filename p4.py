@@ -117,8 +117,10 @@ def play(gameP4: GameP4, column: int, number: int) -> bool:
     canPlay = False
     i = 0
     for i in range(gameP4.sizeY - 1, -1, -1):
+        #on verifie que la case est libre et que l'on a pas encore joué
         if gameP4.plate[i][column-1] == 0 and not canPlay:
             gameP4.plate[i][column-1] = number
+            #on renseigne le fait que l'on a joué
             canPlay = True
     return canPlay
 
@@ -141,13 +143,16 @@ def displayGrid(gameP4: GameP4, currentPLayers: CurrentPlayers) -> None:
 
     i = 0
     j = 0
+    # affichage de l'emplacement de chaque colonne
     print("  ", end="")
     for i in range(0, gameP4.sizeX):
         print(setColorRed(str(i+1)), end="    ")
     print()
     for i in range(0, gameP4.sizeY):
+        #affichage de la ligne
         print(setColorBlue("+") + setColorBlue("----+")*gameP4.sizeX)
         print(setColorBlue("|"), end="")
+        #affichage des cases avec pion si present
         for j in range(0, gameP4.sizeX):
             if gameP4.plate[i][j] == currentPLayers.player1.playerNumber:
                 print(f" {gameP4.player1Pawn}  "+setColorBlue("|"), end="")
@@ -181,6 +186,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
     finished = False
     gameP4 = GameP4()
     winningInformations = WinningInformations()
+    #Initialisation du jeu
     gameP4Init(gameP4)
     displayStartingMenu("Puissance 4", [
         "REGLES DU JEU :",
@@ -205,6 +211,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
             if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):
                 finished = True
             else:
+                #recuperation du joueur suivant
                 currentPlayer = getOtherPlayer(currentPlayers, currentPlayer)
     winningInformationsInit(winningInformations, gameP4.colName,gameP4.pointDraw,gameP4.pointWin,gameP4.pointLoose,checkDraw(gameP4,currentPlayer))
     pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)
