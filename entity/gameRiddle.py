@@ -27,7 +27,7 @@ def gameRiddleInit(gameRiddle : GameRiddle, currentPlayers : CurrentPlayers)->No
     numberToGuess : str
     maxAttempts : str
 
-    gameRiddle.pointLoose = 2
+    gameRiddle.pointLoose = 1
     gameRiddle.pointWin = 15
     gameRiddle.colName = "scoreRiddle"
     gameRiddle.attempts = 0

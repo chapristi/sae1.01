@@ -181,12 +181,12 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+ currentPlayer.name + ")") + " à toi de jouer")
-        choiceX = input("choisi ou tu souhaites deposer ton pion sur l'axe x")
+        choiceX = input("choisi ou tu souhaites deposer ton pion sur l'axe x (ligne) ")
         while not isDigit(choiceX) or int(choiceX) <= 0 or int(choiceX) >= 4 :
-            choiceX = input(setColorYellow("chosi sur l'axe x ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
-        choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y")
+            choiceX = input(setColorYellow("chosi sur l'axe x (ligne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
+        choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y (colonne) ")
         while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
-            choiceY = input(setColorYellow("chosi l'axe y ou tu souhaites deposer ton pion entre 1 et 3 inclus"))
+            choiceY = input(setColorYellow("chosi l'axe y (colonne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
         #si le joueur n'a pas pu jouer c'est que la case est déjà occupée
         if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
             print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
