@@ -7,14 +7,14 @@ from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from helpers.startingMenu import displayStartingMenu
 
-def calcPoints(attempts: int, maxAttempts: int, pointWin:int) -> int:
+def calcPoints(attempts: int, maxAttempts: int, pointWin: int) -> int:
     """
     Calcule les points en fonction du nombre d'essais et du nombre maximal d'essais autorisé.
 
     Args:
         attempts (int): Le nombre d'essais effectués.
-        max_attempts (int): Le nombre maximal d'essais autorisé.
-        point_win (int): Le nombre de points à attribuer en cas de victoire.
+        maxAttempts (int): Le nombre maximal d'essais autorisé.
+        pointWin (int): Le nombre de points à attribuer en cas de victoire.
 
     Returns:
         int: Le nombre de points attribués.
@@ -22,11 +22,15 @@ def calcPoints(attempts: int, maxAttempts: int, pointWin:int) -> int:
     if attempts <= 0 or maxAttempts <= 0:
         return 0  # Éviter la division par zéro
 
-    points = 1 - (maxAttempts / attempts)
-    points = min(1, points)  # Limiter le score à 1 au maximum
+    if attempts == 1:
+        return pointWin  # Si l'utilisateur trouve en 1 essai, attribuer le maximum de points
+
+    points = 1 - (attempts - 1) / maxAttempts
+    points = max(0, points)  # Limiter le score à 0 au minimum
     points *= pointWin
 
-    return max(1, int(points))  # Assurer un minimum de 1 point attribué
+    return min(pointWin, int(points))  # Assurer un maximum de 15 points attribués
+
 
 def guessNumber(gameRiddle : GameRiddle, information : str, choice : int) -> bool:
     """
