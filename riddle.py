@@ -92,7 +92,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection)->None:
             choice = input("(" + setColorGreen(currentPlayers.player2.name)+ ")"+" Essayez de trouver le nombre")
         information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+ " Entrez (trop petit => 1), (trop grand => 2) ou (c'est gagné => 3) en fonction du nombre entree ")
         #verification si le joueur 1 ment sur le resultat
-        while not isDigit(information) and guessNumber (gameRiddle,int(information),int(choice)):
+        while not isDigit(information) or guessNumber (gameRiddle,int(information),int(choice)):
             information = input("(" + setColorGreen(currentPlayers.player1.name)+ ")"+" ne mentez pas! Entrez (trop petit => 1), (trop grand => 2) ou (c'est gagné => 3) en fonction du nombre entree ")
         if int(choice) == gameRiddle.numberToGuess:
             winner = currentPlayers.player2
