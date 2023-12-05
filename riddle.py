@@ -47,9 +47,9 @@ def guessNumber(gameRiddle : GameRiddle, information : int , choice : int) -> bo
     isLiar : bool
 
     isLiar = True
-    if choice > gameRiddle.numberToGuess and information == 1:
+    if choice > gameRiddle.numberToGuess and information == 2:
         isLiar = False
-    elif choice < gameRiddle.numberToGuess and information == 2:
+    elif choice < gameRiddle.numberToGuess and information == 1:
         isLiar = False
     elif choice == gameRiddle.numberToGuess and information == 3:
         isLiar = False
