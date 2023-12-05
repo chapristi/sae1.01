@@ -60,8 +60,11 @@ def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
             if (j >= 3 and i <= 2 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j-1] == currentPlayerNumber
                     and gameP4.plate[i+2][j-2] == currentPlayerNumber and gameP4.plate[i+3][j-3] == currentPlayerNumber):
                 isWin = True
-            if (i <= 2 and j <= 5 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j+1] == currentPlayerNumber
-                    and gameP4.plate[i+2][j+2] == currentPlayerNumber and gameP4.plate[i+3][j+3] == currentPlayerNumber):
+            if (i + 3 < len(gameP4.plate) and j + 3 < len(gameP4.plate[0])
+            and gameP4.plate[i][j] == currentPlayerNumber 
+            and gameP4.plate[i+1][j+1] == currentPlayerNumber 
+            and gameP4.plate[i+2][j+2] == currentPlayerNumber 
+            and gameP4.plate[i+3][j+3] == currentPlayerNumber):
                 isWin = True
             j += 1
         i += 1

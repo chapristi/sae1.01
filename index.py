@@ -83,22 +83,21 @@ if __name__ == "__main__":
             print(setColorRed("Ce choix n'existe pas\n"))
             gameChoice = input("1 => Pour jouer aux devinettes \n2 => Pour jouer au jeu des allumettes\n3 => Pour jouer au jeu du morpion\n4 => Pour jouer au jeu du puissance 4\n5 => Pour afficher le classement des joueurs par jeux\n6 => Pour quitter le jeu\nMon choix est  ")
 
-        match int(gameChoice):
-            case 1 : 
-                gameRiddle(currentPlayers,con)
-            case 4:
-                gameP4(currentPlayers,con)
-            case 3:
-                gameTicTacToe(currentPlayers,con)
-            case 2:
-                gameMatch(currentPlayers,con)
-            case 5: 
-                displayLeaderBoards(con)
-            case 6:
-                print(setColorGreen("Merci d'avoir joué à bientot"))
-                end = True
-            case _:
-                print(setColorRed("Ce choix n'existe pas"))
+        if int(gameChoice) ==  1: 
+            gameRiddle(currentPlayers,con)
+        elif int(gameChoice) ==   4:
+            gameP4(currentPlayers,con)
+        elif  int(gameChoice) ==  3:
+            gameTicTacToe(currentPlayers,con)
+        elif int(gameChoice) == 2:
+            gameMatch(currentPlayers,con)
+        elif int(gameChoice) ==  5: 
+            displayLeaderBoards(con)
+        elif int(gameChoice) ==  6:
+            print(setColorGreen("Merci d'avoir joué à bientot"))
+            end = True
+        else:
+            print(setColorRed("Ce choix n'existe pas"))
         changePlayer(currentPlayers)
     #fermeture de la connection à la base de données.
     con.close()
