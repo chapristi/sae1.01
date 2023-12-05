@@ -60,7 +60,6 @@ def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
             if (j >= 3 and i <= 2 and gameP4.plate[i][j] == currentPlayerNumber and gameP4.plate[i+1][j-1] == currentPlayerNumber
                     and gameP4.plate[i+2][j-2] == currentPlayerNumber and gameP4.plate[i+3][j-3] == currentPlayerNumber):
                 isWin = True
-            print(len(gameP4.plate))
             if (i + 3 < gameP4.sizeY and j + 3 < gameP4.sizeX 
             and gameP4.plate[i][j] == currentPlayerNumber 
             and gameP4.plate[i+1][j+1] == currentPlayerNumber 
