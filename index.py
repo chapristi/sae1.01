@@ -40,8 +40,8 @@ if __name__ == "__main__":
         choice = input("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
             choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("username ")
-        password = getpass.getpass("password ")
+        username = input("nom d'utilisateur ")
+        password = getpass.getpass("mot de passe ")
         if int(choice) == 0:
             player1 = connect(username,password, con)
             if player1.id == -1:
@@ -58,8 +58,8 @@ if __name__ == "__main__":
         choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
         while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
             choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("username ")
-        password = getpass.getpass("password ")
+        username = input("nom d'utilisateur ")
+        password = getpass.getpass("mot de passe ")
         if int(choice) == 0 :
             player2 = connect(username,password, con)
             if player2.id == -1:

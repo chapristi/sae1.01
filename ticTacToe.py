@@ -192,7 +192,6 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
             print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
         else:
             displayGrid(gameTicTacToe, currentPlayers)
-            print(checkWin(gameTicTacToe,currentPlayer))
             #si il y a une victoire ou une égalité on arrete le jeu 
             if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
                 finished = True
