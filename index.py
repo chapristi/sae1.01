@@ -1,5 +1,5 @@
 import sqlite3
-from entity.player import CurrentPlayers,Player,currentPlayersInit
+from entity.player import * 
 from helpers.helperPlayer import changePlayer
 from dataServices.sqlCommands import connect,register
 from helpers.colors import *
@@ -37,30 +37,38 @@ if __name__ == "__main__":
 
     while player1.id == -1:
         print("Connectez-vous à votre compte joueur 1")
-        choice = input("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
-        while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("nom d'utilisateur ")
-        password = getpass.getpass("mot de passe ")
+        choice = input("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " , vous "+ setColorGreen("inscrire(1)") + " ou "+ setColorGreen("bot(2)"))
+        while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1 and int(choice) != 2):
+            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " , vous "+ setColorGreen("inscrire(1)") + " ou "+ setColorGreen("bot(2)")))
         if int(choice) == 0:
+            username = input("nom d'utilisateur ")
+            password = getpass.getpass("mot de passe ")
             player1 = connect(username,password, con)
+            player1.isBot = False
             if player1.id == -1:
                 print(setColorRed("Mot de passe ou nom d'utilisateur invalide"))
         elif int(choice) == 1:
+            username = input("nom d'utilisateur ")
+            password = getpass.getpass("mot de passe ")
             player1 = register(username,password,con)
             if player1.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
+        elif int(choice) == 2:
+            botLvl = input("Entrez le niveau du bot (1 à 10)")
+            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 10):
+                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 10"))
+            playerInit(player1,2,"Bot LaLa",True,int(botLvl))
         else:
             print(setColorRed("Ce choix n'existe pas"))
 
     while player2.id == -1:
         print("Connectez-vous à votre compte joueur 2")
-        choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)"))
-        while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1):
-            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " ou vous "+ setColorGreen("inscrire(1)")))
-        username = input("nom d'utilisateur ")
-        password = getpass.getpass("mot de passe ")
+        choice = input("vous souhaiter vous "+ setColorGreen("connecter(0)") + ", vous "+ setColorGreen("inscrire(1)") + " ou "+ setColorGreen("bot(2)"))
+        while not isDigit(choice) or (int(choice) != 0 and int(choice) != 1 and int(choice) != 2 ):
+            choice = input(setColorYellow("Vous souhaiter vous "+ setColorGreen("connecter(0)") + " , vous "+ setColorGreen("inscrire(1)") + " ou "+ setColorGreen("bot(2)")))
         if int(choice) == 0 :
+            username = input("nom d'utilisateur ")
+            password = getpass.getpass("mot de passe ")
             player2 = connect(username,password, con)
             if player2.id == -1:
                 print(setColorRed("Mot de passe ou nom d'utilisateur invalide"))
@@ -68,9 +76,16 @@ if __name__ == "__main__":
                 print(setColorRed("⚠️ Ce joueur est déjà connecté"))
                 player2.id = -1
         elif int(choice) == 1:
+            username = input("nom d'utilisateur ")
+            password = getpass.getpass("mot de passe ")
             player2 = register(username,password,con)
             if player2.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
+        elif int(choice) == 2:
+            botLvl = input("Entrez le niveau du bot (1 à 10)")
+            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 10):
+                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 10"))
+            playerInit(player2,1,"Bot Patoche",True,int(botLvl))
         else:
             print(setColorRed("Ce choix n'existe pas"))
     # Initialisation des joueurs qui s'apprêtent à jouer        

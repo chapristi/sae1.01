@@ -1,10 +1,15 @@
+from helpers.colors import *
+from helpers.inputChecker import isDigit
+
 class Player:
     id : int
     name : str
     playerNumber : int
+    isBot : bool
+    lvl : int
     
 
-def playerInit(player : Player,id : int,name : str)->None:
+def playerInit(player : Player,id : int,name : str,isBot : bool,level: int)->None:
     """
         Initialise un objet joueur avec les informations fournies.
 
@@ -14,21 +19,24 @@ def playerInit(player : Player,id : int,name : str)->None:
             player (Player): L'objet de joueur à initialiser.
             id (int): L'identifiant du joueur.
             name (str): Le nom du joueur.
-            scoreRiddle (int): Le score du joueur dans le jeu de Devinette.
-            scoreTtt (int): Le score du joueur dans le jeu de Tic Tac Toe.
-            scoreMatches (int): Le score du joueur dans le jeu des Allumettes.
-            scoreP4 (int): Le score du joueur dans le jeu de Puissance 4.
+         
 
         Returns:
             None
     """
     player.id = id
     player.name = name
-   
+    player.lvl = level
+    player.isBot = isBot
+
+
+
+
 
 class CurrentPlayers:
     player1 : Player
     player2 : Player
+
 
 def currentPlayersInit(curentPlayers : CurrentPlayers, player1 : Player, player2 : Player)->None:
     """
@@ -48,3 +56,18 @@ def currentPlayersInit(curentPlayers : CurrentPlayers, player1 : Player, player2
     curentPlayers.player2 = player2
     curentPlayers.player1.playerNumber = 2
     curentPlayers.player2.playerNumber = 3
+
+def changeBotLevel(player : Player):
+    if player.isBot:
+        choice = input(f"Configurer le niveau de {player.name} ? (O/n) ").lower()
+        if choice == "o" or choice == "":
+            level = input("Entrez le niveau (1 à 10): ")
+            while not isDigit(level) or not (1 <= int(level) <= 10):
+                print("Niveau invalide. Veuillez entrer un nombre entre 1 et 10.")
+                level = input("Entrez le niveau (1 à 10): ")
+            player.lvl = int(level)
+
+def configureBotsLevel(currentPlayers : CurrentPlayers):
+    for player in [currentPlayers.player1, currentPlayers.player2]:
+        changeBotLevel(player)
+   

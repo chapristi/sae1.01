@@ -8,7 +8,40 @@ from helpers.helperPlayer import getOtherPlayer
 from helpers.startingMenu import displayStartingMenu
 from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
+from random import randint
 
+
+def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
+    i : int
+    j : int
+    tab : list[tuple[int,int]]
+
+    tab = list()
+    i = 0
+    j = 0
+    while i <  gameTicTacToe.sizeY:
+        while j < gameTicTacToe.sizeX:
+            if gameTicTacToe.plate[i][j] == 0 :
+                tab.append((i,j))
+            j+=1
+        i+=1
+        j = 0
+    return tab
+
+def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player)->bool:
+    el : int
+    nbEls : int 
+    moves: list[tuple[int,int]]
+    move : tuple[int,int]
+
+    moves  = remainingMoves(gameTicTacToe)
+    nbEls = len(moves)
+    if nbEls > 1 : 
+        el = randint(0,nbEls -1)
+        move = moves[el] 
+        gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
+        return True
+    return False
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -116,6 +149,67 @@ def checkDraw(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
         j = 0
     return isDraw
 
+def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPayer : Player, depth: int, isMaxing: bool) -> int:
+    max_eval: float
+    min_eval: float
+    eval: float
+    
+    if checkWin(gameTicTacToe, currentPlayers.player2):
+        return 100 - depth 
+    elif checkWin(gameTicTacToe, currentPlayers.player1):
+        return -100 + depth
+    elif checkDraw(gameTicTacToe, currentPlayers.player2) or checkDraw(gameTicTacToe, currentPlayers.player1):
+        return 0
+
+    if isMaxing:
+        max_eval = -10000
+        for move in remainingMoves(gameTicTacToe):
+            gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
+            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth + 1, not isMaxing)
+            max_eval = max(max_eval, eval)
+            gameTicTacToe.plate[move[0]][move[1]] = 0
+    
+        return max_eval + depth  # Inverse l'ajustement de la profondeur
+    else:
+        min_eval = 10000
+        for move in remainingMoves(gameTicTacToe):
+            gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player1.playerNumber
+            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth + 1, not isMaxing)
+            min_eval = min(min_eval, eval)
+            gameTicTacToe.plate[move[0]][move[1]] = 0
+            
+        return min_eval - depth  # Inverse l'ajustement de la profondeur
+
+def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers, currentPlayer: Player):
+    moves : list[tuple[int,int]]
+    eval: float
+    moves = list()
+
+    moves = remainingMoves(gameTicTacToe)
+    bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000
+    if (1,1) in moves:
+        bestMove = (1,1)
+    else:
+        bestMove =  moves[0]
+
+    random = randint(1,10)
+    print(random >= currentPlayer.lvl)
+    if random > currentPlayer.lvl :
+        print("randomPlay")
+        botRandomPlay(gameTicTacToe,currentPlayer)
+    else:
+        for move in remainingMoves(gameTicTacToe):
+            gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
+        
+            eval = minimax(gameTicTacToe, currentPlayers,currentPlayer, 0, currentPlayer == currentPlayers.player1)
+            gameTicTacToe.plate[move[0]][move[1]] = 0
+
+            if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
+                bestEval = eval
+                bestMove = move
+
+        gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:
     """
         Joue un coup sur le plateau de jeu.
@@ -176,26 +270,37 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
         "3. Le gagnant est celui qui parvient à aligner 3 jetons identiques horizontalement verticalement ou en diagonale. ",
         "4. AA chaque joueur sera affecté une jeton"
     ])
+    configureBotsLevel(currentPlayers)
     print("vous allez joueur sur cette grille")
+
     displayGrid(gameTicTacToe,currentPlayers)
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+ currentPlayer.name + ")") + " à toi de jouer")
-        choiceX = input("choisi ou tu souhaites deposer ton pion sur l'axe x (ligne) ")
-        while not isDigit(choiceX) or int(choiceX) <= 0 or int(choiceX) >= 4 :
-            choiceX = input(setColorYellow("chosi sur l'axe x (ligne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
-        choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y (colonne) ")
-        while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
-            choiceY = input(setColorYellow("chosi l'axe y (colonne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
-        #si le joueur n'a pas pu jouer c'est que la case est déjà occupée
-        if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
-            print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-        else:
+        if currentPlayer.isBot:
+            chooseBestMove(gameTicTacToe,currentPlayers,currentPlayer)
             displayGrid(gameTicTacToe, currentPlayers)
             #si il y a une victoire ou une égalité on arrete le jeu 
             if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
                 finished = True
             else:
                 currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
+        else:
+            choiceX = input("choisi ou tu souhaites deposer ton pion sur l'axe x (ligne) ")
+            while not isDigit(choiceX) or int(choiceX) <= 0 or int(choiceX) >= 4 :
+                choiceX = input(setColorYellow("chosi sur l'axe x (ligne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
+            choiceY = input("choisi ou tu souhaites deposer ton pion l'axe y (colonne) ")
+            while not isDigit(choiceY) or int(choiceY) <= 0 or int(choiceY) >= 4 :
+                choiceY = input(setColorYellow("chosi l'axe y (colonne) ou tu souhaites deposer ton pion entre 1 et 3 inclus "))
+            #si le joueur n'a pas pu jouer c'est que la case est déjà occupée
+            if(not play(gameTicTacToe,currentPlayer,int(choiceX),int(choiceY))):
+                print(setColorRed(f"⛔({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+            else:
+                displayGrid(gameTicTacToe, currentPlayers)
+                #si il y a une victoire ou une égalité on arrete le jeu 
+                if checkWin(gameTicTacToe,currentPlayer) or checkDraw(gameTicTacToe,currentPlayer):
+                    finished = True
+                else:
+                    currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
     winningInformationsInit(winningInformations, gameTicTacToe.colName,gameTicTacToe.pointDraw,gameTicTacToe.pointWin,gameTicTacToe.pointLoose,checkDraw(gameTicTacToe,currentPlayer))
     pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)    

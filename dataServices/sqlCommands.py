@@ -43,7 +43,7 @@ def register(name : str, password : str, conn : Connection)->Player:
         playerElements  = res.fetchone()
         if playerElements == None:
             return player
-        playerInit(player, int(playerElements[0]), playerElements[1])
+        playerInit(player, int(playerElements[0]), playerElements[1],False,-1)
         return player
     except sqliteErr:
         #si une erreur sql je retourne un joueur avec un id à -1
@@ -92,7 +92,7 @@ def connect(name :str, password : str , conn : Connection) -> Player:
         playerElements  = res.fetchone()
         if playerElements == None:
             return player
-        playerInit(player, int(playerElements[0]), playerElements[1])
+        playerInit(player, int(playerElements[0]), playerElements[1],False,-1)
         return player
     except sqliteErr:
         #si une erreur sql je retourne un joueur avec un id à -1

@@ -35,6 +35,6 @@ def pointsDistribution(
         addPoint(otherPlayer.id,winningInformations.pointLoose,conn,winningInformations.colName)
     #s'il y a egalité
     else:
-        print(setColorGreen("🙃 Bravo une egalité parfaite "+ currentPlayers.player1.name + " et "+ currentPlayers.player2.name + "vous remportez " + str(winningInformations.pointDraw) + " points"))
+        print(setColorGreen("🙃 Bravo une egalité parfaite "+ currentPlayers.player1.name + " et "+ currentPlayers.player2.name + " vous remportez " + str(winningInformations.pointDraw) + " points"))
         addPoint(currentPlayers.player1.id,winningInformations.pointDraw,conn,winningInformations.colName)
         addPoint(currentPlayers.player2.id,winningInformations.pointDraw,conn,winningInformations.colName)
