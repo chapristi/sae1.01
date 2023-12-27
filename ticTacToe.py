@@ -187,7 +187,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
 
     moves = remainingMoves(gameTicTacToe)
     bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000
-    if (1,1) in moves:
+    if (1,1) in moves and len(moves) == 9:
         bestMove = (1,1)
     else:
         bestMove =  moves[0]
