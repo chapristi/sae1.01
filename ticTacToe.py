@@ -32,7 +32,7 @@ def heuristique(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, 
                 result -=  poids[i][j]
     return result
 
-def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player):
+def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player, canBlock : list[bool]):
     moves = remainingMoves(gameTicTacToe)
 
     if currentPlayer == currentPlayers.player1:
@@ -51,12 +51,14 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
         gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
 
     # Vérifier s'il y a une possibilité pour l'adversaire de gagner au prochain coup
-    for move in moves:
-        gameTicTacToe.plate[move[0]][move[1]] = opponentPlayer.playerNumber
-        if checkWin(gameTicTacToe, opponentPlayer):
+    if canBlock[0]:
+        for move in moves:
+            gameTicTacToe.plate[move[0]][move[1]] = opponentPlayer.playerNumber
+            if checkWin(gameTicTacToe, opponentPlayer):
+                gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
+                canBlock[0] = not canBlock[0]
+                return move
             gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
-            return move
-        gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
 
     # Si aucune possibilité de gagner ou de bloquer, jouer en utilisant les poids
     weights = [
@@ -254,8 +256,11 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
     eval: float
     first_move : bool
     depth : int
+    canBlock : list[bool]
 
     first_move = False
+    canBlock = [True]
+
     moves = list()
     
 
@@ -273,7 +278,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
         depth = 9 #profondeur max
     random = randint(1,10)
     if currentPlayer.lvl == 2:
-        bestMove = customLevel(gameTicTacToe,currentPlayers,currentPlayer)
+        bestMove = customLevel(gameTicTacToe,currentPlayers,currentPlayer,canBlock)
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
 
     elif (currentPlayer.lvl == 3 and random > 8) or currentPlayer.lvl == 1:
