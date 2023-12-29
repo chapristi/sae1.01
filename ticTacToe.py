@@ -10,6 +10,73 @@ from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from random import randint
 
+def heuristique(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, player2 : bool):
+    poids : list[list[int]]
+    i : int
+    j : int
+    result : int
+
+
+    poids = [
+        [5,3,5],
+        [3,10,3],
+        [5,3,5]
+    ]
+    result = 0
+
+    for i in range(0,gameTicTacToe.sizeY -1):
+        for j in range(0,gameTicTacToe.sizeY -1):
+            if player2 and gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
+                result +=  poids[i][j]
+            elif  not player2 and gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber :
+                result -=  poids[i][j]
+    return result
+
+def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player):
+    moves = remainingMoves(gameTicTacToe)
+
+    if currentPlayer == currentPlayers.player1:
+        currentPlayer = currentPlayers.player1
+        opponentPlayer = currentPlayers.player2
+    else:
+        currentPlayer = currentPlayers.player2
+        opponentPlayer = currentPlayers.player1
+
+    # Vérifier s'il y a une possibilité de gagner au prochain coup
+    for move in moves:
+        gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
+        if checkWin(gameTicTacToe, currentPlayer):
+            gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
+            return move
+        gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
+
+    # Vérifier s'il y a une possibilité pour l'adversaire de gagner au prochain coup
+    for move in moves:
+        gameTicTacToe.plate[move[0]][move[1]] = opponentPlayer.playerNumber
+        if checkWin(gameTicTacToe, opponentPlayer):
+            gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
+            return move
+        gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
+
+    # Si aucune possibilité de gagner ou de bloquer, jouer en utilisant les poids
+    weights = [
+        [5, 3, 5],
+        [3, 10, 3],
+        [5, 3, 5]
+    ]
+
+    bestMove = moves[0]
+    bestWeight = 0
+
+    for move in moves:
+        i, j = move
+        if gameTicTacToe.plate[i][j] == 0:
+            weight = weights[i][j]
+            if weight > bestWeight:
+                bestWeight = weight
+                bestMove = move
+
+    return bestMove
 
 def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
     i : int
@@ -155,59 +222,76 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
     eval: float
     
     if checkWin(gameTicTacToe, currentPlayers.player2):
-        return 100 - depth 
+        return 100
     elif checkWin(gameTicTacToe, currentPlayers.player1):
-        return -100 + depth
+        return -100
     elif checkDraw(gameTicTacToe, currentPlayers.player2) or checkDraw(gameTicTacToe, currentPlayers.player1):
         return 0
+    elif depth == 0:
+        return heuristique(gameTicTacToe,currentPlayers, isMaxing)
 
     if isMaxing:
         max_eval = -10000
         for move in remainingMoves(gameTicTacToe):
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
-            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth + 1, not isMaxing)
+            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing)
             max_eval = max(max_eval, eval)
             gameTicTacToe.plate[move[0]][move[1]] = 0
     
-        return max_eval + depth  # Inverse l'ajustement de la profondeur
+        return max_eval
     else:
         min_eval = 10000
         for move in remainingMoves(gameTicTacToe):
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player1.playerNumber
-            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth + 1, not isMaxing)
+            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing)
             min_eval = min(min_eval, eval)
             gameTicTacToe.plate[move[0]][move[1]] = 0
             
-        return min_eval - depth  # Inverse l'ajustement de la profondeur
+        return min_eval
 
 def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers, currentPlayer: Player):
     moves : list[tuple[int,int]]
     eval: float
+    first_move : bool
+    depth : int
+
+    first_move = False
     moves = list()
+    
 
     moves = remainingMoves(gameTicTacToe)
     bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000
     if (1,1) in moves and len(moves) == 9:
         bestMove = (1,1)
+        first_move = True
     else:
         bestMove =  moves[0]
 
+    if currentPlayer.lvl == 4:
+        depth = 1 #profondeur de 1 pour que le niveau du bot soit moins bon
+    else:
+        depth = 9 #profondeur max
     random = randint(1,10)
-    print(random >= currentPlayer.lvl)
-    if random > currentPlayer.lvl :
+    if currentPlayer.lvl == 2:
+        bestMove = customLevel(gameTicTacToe,currentPlayers,currentPlayer)
+        gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+
+    elif (currentPlayer.lvl == 3 and random > 8) or currentPlayer.lvl == 1:
         print("randomPlay")
         botRandomPlay(gameTicTacToe,currentPlayer)
-    else:
+    elif not first_move:
         for move in remainingMoves(gameTicTacToe):
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
-        
-            eval = minimax(gameTicTacToe, currentPlayers,currentPlayer, 0, currentPlayer == currentPlayers.player1)
+            
+            eval = minimax(gameTicTacToe, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1)
             gameTicTacToe.plate[move[0]][move[1]] = 0
 
             if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
                 bestEval = eval
                 bestMove = move
 
+        gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+    else:
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
 
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:

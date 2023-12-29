@@ -54,9 +54,9 @@ if __name__ == "__main__":
             if player1.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
         elif int(choice) == 2:
-            botLvl = input("Entrez le niveau du bot (1 à 10)")
-            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 10):
-                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 10"))
+            botLvl = input("Entrez le niveau du bot (1 à 5)")
+            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 5):
+                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 5"))
             playerInit(player1,2,"Bot LaLa",True,int(botLvl))
         else:
             print(setColorRed("Ce choix n'existe pas"))
@@ -82,9 +82,9 @@ if __name__ == "__main__":
             if player2.id == -1:
                 print(setColorRed("⚠️ Ce nom d'utilisateur est déjà utilisé"))
         elif int(choice) == 2:
-            botLvl = input("Entrez le niveau du bot (1 à 10)")
-            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 10):
-                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 10"))
+            botLvl = input("Entrez le niveau du bot (1 à 5)")
+            while not isDigit(botLvl) or not (1 <= int(botLvl) <= 5):
+                botLvl = input(setColorYellow("⚠️ entrez le niveau du bot de 1 à 5"))
             playerInit(player2,1,"Bot Patoche",True,int(botLvl))
         else:
             print(setColorRed("Ce choix n'existe pas"))
