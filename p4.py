@@ -7,6 +7,124 @@ from sqlite3 import Connection
 from helpers.helperPlayer import getOtherPlayer
 from helpers.startingMenu import displayStartingMenu
 from helpers.pointRepartition import pointsDistribution
+from random import randint
+
+def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
+    moves  : list[tuple[int,int]]
+    i : int
+    j : int
+    isColFinished : bool
+
+    isColFinished = False
+    moves = []
+    for i in range(0,gameP4.sizeY):
+        for j in range(gameP4.sizeX - 1, -1, -1):
+            if gameP4.plate[i][j] == 0 and not isColFinished:
+                moves.append((i, j))
+                isColFinished = True
+    return moves
+
+def alignementEnDeux(gameTicTacToe: GameP4, player : Player) -> int:
+    count: int = 0
+
+    # Vérification horizontale
+    for i in range(gameTicTacToe.sizeY):
+        for j in range(gameTicTacToe.sizeX - 1):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and gameTicTacToe.plate[i][j + 1] == player.playerNumber:
+                count += 1
+
+    # Vérification verticale
+    for i in range(gameTicTacToe.sizeY - 1):
+        for j in range(gameTicTacToe.sizeX):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j] == player.playerNumber:
+                count += 1
+
+    # Vérification diagonale (/)
+    for i in range(gameTicTacToe.sizeY - 1):
+        for j in range(gameTicTacToe.sizeX - 1):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j + 1] == player.playerNumber:
+                count += 1
+
+    # Vérification diagonale (\)
+    for i in range(1, gameTicTacToe.sizeY):
+        for j in range(gameTicTacToe.sizeX - 1):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i - 1][j + 1] == player.playerNumber:
+                count += 1
+
+    return count
+
+
+def alignementEnTrois(gameTicTacToe : GameP4,player : Player):
+
+    count  : int
+
+    count = 0
+    # Vérification horizontale
+    for i in range(gameTicTacToe.sizeY):
+        for j in range(gameTicTacToe.sizeX - 2):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i][j + 1] == player.playerNumber and  gameTicTacToe.plate[i][j + 2] == player.playerNumber:
+                count += 1
+
+    # Vérification verticale
+    for i in range(gameTicTacToe.sizeY - 2):
+        for j in range(gameTicTacToe.sizeX):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and gameTicTacToe.plate[i + 1][j] == player.playerNumber and  gameTicTacToe.plate[i + 2][j] == player.playerNumber:
+                count += 1
+
+    # Vérification diagonale (/)
+    for i in range(gameTicTacToe.sizeY - 2):
+        for j in range(gameTicTacToe.sizeX - 2):
+            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j + 1] == player.playerNumber and  gameTicTacToe.plate[i + 2][j + 2] == player.playerNumber:
+                count += 1
+
+    # Vérification diagonale (\)
+    for i in range(1, gameTicTacToe.sizeY - 1):
+        for j in range(gameTicTacToe.sizeX - 2):
+            if gameTicTacToe.plate[i][j] ==  player.playerNumber and gameTicTacToe.plate[i - 1][j + 1] ==  player.playerNumber and gameTicTacToe.plate[i - 2][j + 2] == player.playerNumber:
+                count += 1
+
+    return count   
+
+def scoreAlignement(gameTicTacToe : GameP4,player : Player) -> int:
+    scoreAlignementDeux : int
+    scoreAlignementTrois : int
+
+
+    scoreAlignementDeux = 1
+    scoreAlignementTrois = 3
+
+    return alignementEnDeux(gameTicTacToe, player) * scoreAlignementDeux + alignementEnTrois(gameTicTacToe, player)  * scoreAlignementTrois
+
+def heuristique(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, player2 : bool):
+    poids : list[list[int]]
+    i : int
+    j : int
+    result : int
+
+
+    poids =[
+        [3,4,5,7,5,4,3],
+        [4,6,8,10,8,6,4],
+        [5,8,11,13,11,8,5],
+        [5,8,11,13,11,8,5],
+        [4,6,8,10,8,6,4],
+        [3,4,5,7,5,4,3]
+    ]
+    result = 0
+
+    for i in range(0,gameTicTacToe.sizeY -1):
+        for j in range(0,gameTicTacToe.sizeY -1):
+            if player2 and gameTicTacToe.plate[i][j] == currentPlayers.player2.playerNumber:
+                result +=  poids[i][j]
+            elif not player2 and gameTicTacToe.plate[i][j] == currentPlayers.player1.playerNumber :
+                result -=  poids[i][j]
+    #essayer de voir les allignements de trois prions, deux pions et 4 pions donner des scores en fonctions 
+    if player2:
+        result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
+    else:
+        result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
+
+    return result
 
 def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
     """
@@ -127,7 +245,88 @@ def play(gameP4: GameP4, column: int, number: int) -> bool:
             canPlay = True
     return canPlay
 
+def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Player, depth: int, isMaximizing: bool,alpha : float, beta : float) -> int:
+    if checkWin(gameP4, currentPlayers.player2):
+        return 10000
+    elif checkWin(gameP4, currentPlayers.player1):
+        return -10000
+    elif checkDraw(gameP4, currentPlayers.player2) or checkDraw(gameP4, currentPlayers.player1):
+        return 0
+    elif depth == 0:
+        return heuristique(gameP4,currentPlayers, isMaximizing)
 
+    if isMaximizing:
+        max_eval = 100000
+        for move in remainingMoves(gameP4):
+            gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
+            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, False,alpha,beta)
+            gameP4.plate[move[0]][move[1]] = 0
+            max_eval = max(max_eval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
+        return max_eval
+    else:
+        min_eval = -100000
+        for move in remainingMoves(gameP4):
+            gameP4.plate[move[0]][move[1]] = getOtherPlayer(currentPlayers, currentPlayer).playerNumber
+            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, True,alpha,beta)
+            gameP4.plate[move[0]][move[1]] = 0
+            min_eval = min(min_eval, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
+        return min_eval
+
+def botRandomPlay(gameP4 : GameP4,currentPlayer :Player):
+    el : int
+    nbEls : int 
+    moves: list[tuple[int,int]]
+    move : tuple[int,int]
+
+    moves  = remainingMoves(gameP4)
+    nbEls = len(moves)
+    if nbEls > 1 : 
+        el = randint(0,nbEls -1)
+        move = moves[el] 
+        gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
+        
+
+def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player, depth : int):
+    eval: int
+    bestEval : int
+    bestMove : tuple[int,int]
+    
+    bestMove = remainingMoves(gameP4)[0]
+    bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000
+    for move in remainingMoves(gameP4):
+        gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
+            
+        eval = minimax(gameP4, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1,float("-inf"),float("inf"))
+        gameP4.plate[move[0]][move[1]] = 0
+
+        if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
+            bestEval = eval
+            bestMove = move
+
+    gameP4.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+
+def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player):
+    if currentPlayer.isBot:
+        if currentPlayer.lvl == 1:
+            botRandomPlay(gameP4,currentPlayer)
+        elif currentPlayer.lvl == 2:
+            bestMove(gameP4,currentPlayers,currentPlayer,1)
+        elif currentPlayer.lvl == 3:
+            bestMove(gameP4,currentPlayers,currentPlayer,2)
+        elif currentPlayer.lvl == 4:
+            bestMove(gameP4,currentPlayers,currentPlayer,3)
+        elif currentPlayer.lvl == 5:
+            bestMove(gameP4,currentPlayers,currentPlayer,6)
+        else:
+            print("un problème est survenue")
+    
+    
 def displayGrid(gameP4: GameP4, currentPLayers: CurrentPlayers) -> None:
     """
         Affiche la grille de jeu du Puissance 4.

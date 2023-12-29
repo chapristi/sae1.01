@@ -97,7 +97,7 @@ def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
         j = 0
     return tab
 
-def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player)->bool:
+def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player):
     el : int
     nbEls : int 
     moves: list[tuple[int,int]]
@@ -109,8 +109,6 @@ def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player)->bool:
         el = randint(0,nbEls -1)
         move = moves[el] 
         gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
-        return True
-    return False
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -298,6 +296,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
     else:
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+        first_move = False
 
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:
     """
