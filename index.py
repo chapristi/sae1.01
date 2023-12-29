@@ -97,7 +97,6 @@ if __name__ == "__main__":
         while not isDigit(gameChoice):
             print(setColorRed("Ce choix n'existe pas\n"))
             gameChoice = input("1 => Pour jouer aux devinettes \n2 => Pour jouer au jeu des allumettes\n3 => Pour jouer au jeu du morpion\n4 => Pour jouer au jeu du puissance 4\n5 => Pour afficher le classement des joueurs par jeux\n6 => Pour quitter le jeu\nMon choix est  ")
-
         if int(gameChoice) ==  1: 
             gameRiddle(currentPlayers,con)
         elif int(gameChoice) ==   4:

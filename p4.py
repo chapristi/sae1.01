@@ -11,18 +11,23 @@ from random import randint
 
 def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
     moves  : list[tuple[int,int]]
+    isColFinished : bool
     i : int
     j : int
-    isColFinished : bool
-
-    isColFinished = False
+   
     moves = []
-    for i in range(0,gameP4.sizeY):
-        for j in range(gameP4.sizeX - 1, -1, -1):
-            if gameP4.plate[i][j] == 0 and not isColFinished:
+    for j in range(gameP4.sizeX):
+        i = gameP4.sizeY - 1
+        isColFinished = False
+        while i >= 0 and not isColFinished:
+            if gameP4.plate[i][j] == 0:
                 moves.append((i, j))
                 isColFinished = True
+            i -= 1
+
     return moves
+
+   
 
 def alignementEnDeux(gameTicTacToe: GameP4, player : Player) -> int:
     count: int = 0
@@ -119,10 +124,10 @@ def heuristique(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, player2
             elif not player2 and gameTicTacToe.plate[i][j] == currentPlayers.player1.playerNumber :
                 result -=  poids[i][j]
     #essayer de voir les allignements de trois prions, deux pions et 4 pions donner des scores en fonctions 
-    if player2:
-        result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
-    else:
-        result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
+    #if player2:
+     #   result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
+    #else:
+     #   result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
 
     return result
 
@@ -256,9 +261,9 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
         return heuristique(gameP4,currentPlayers, isMaximizing)
 
     if isMaximizing:
-        max_eval = 100000
+        max_eval = -10000
         for move in remainingMoves(gameP4):
-            gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
+            gameP4.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
             eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, False,alpha,beta)
             gameP4.plate[move[0]][move[1]] = 0
             max_eval = max(max_eval, eval)
@@ -267,9 +272,9 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
                 break
         return max_eval
     else:
-        min_eval = -100000
+        min_eval = 100000
         for move in remainingMoves(gameP4):
-            gameP4.plate[move[0]][move[1]] = getOtherPlayer(currentPlayers, currentPlayer).playerNumber
+            gameP4.plate[move[0]][move[1]] = currentPlayers.player1.playerNumber
             eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, True,alpha,beta)
             gameP4.plate[move[0]][move[1]] = 0
             min_eval = min(min_eval, eval)
@@ -298,13 +303,14 @@ def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Play
     bestMove : tuple[int,int]
     
     bestMove = remainingMoves(gameP4)[0]
-    bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000
+    bestEval = -100000 if currentPlayer == currentPlayers.player2 else 100000
+    print(bestEval)
     for move in remainingMoves(gameP4):
         gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
             
         eval = minimax(gameP4, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1,float("-inf"),float("inf"))
         gameP4.plate[move[0]][move[1]] = 0
-
+        print(eval,currentPlayer.name)
         if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
             bestEval = eval
             bestMove = move
@@ -322,7 +328,7 @@ def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer :
         elif currentPlayer.lvl == 4:
             bestMove(gameP4,currentPlayers,currentPlayer,3)
         elif currentPlayer.lvl == 5:
-            bestMove(gameP4,currentPlayers,currentPlayer,6)
+            bestMove(gameP4,currentPlayers,currentPlayer,5)
         else:
             print("un problème est survenue")
     
@@ -401,19 +407,30 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+currentPlayer.name + ")") + " à toi de jouer")
-        choice = input("choisi la collonne ou tu souhaites deposer ton pion")
-        while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8:
-            choice = input(setColorYellow(
-                "choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
-        if (not play(gameP4, int(choice), currentPlayer.playerNumber)):
-            print(setColorRed(
-                f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
-        else:
+        if currentPlayer.isBot:
+            botLevel2Play(gameP4,currentPlayers,currentPlayer)
             displayGrid(gameP4, currentPlayers)
             if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):
                 finished = True
             else:
                 #recuperation du joueur suivant
                 currentPlayer = getOtherPlayer(currentPlayers, currentPlayer)
+        else:
+            choice = input("choisi la collonne ou tu souhaites deposer ton pion")
+            while not isDigit(choice) or int(choice) <= 0 or int(choice) >= 8:
+                choice = input(setColorYellow(
+                    "choisi la collonne ou tu souhaites deposer ton pion entre 1 et 7 inclus"))
+            if (not play(gameP4, int(choice), currentPlayer.playerNumber)):
+                print(setColorRed(
+                    f"⛔ ({currentPlayer.name}) il ne reste plus d'emplacmenent libre sur cette colonne"))
+            else:
+                displayGrid(gameP4, currentPlayers)
+                if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):
+                    finished = True
+                else:
+                    #recuperation du joueur suivant
+                    currentPlayer = getOtherPlayer(currentPlayers, currentPlayer)
+            print(remainingMoves(gameP4))
+
     winningInformationsInit(winningInformations, gameP4.colName,gameP4.pointDraw,gameP4.pointWin,gameP4.pointLoose,checkDraw(gameP4,currentPlayer))
     pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)
