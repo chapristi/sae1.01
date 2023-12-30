@@ -1,5 +1,5 @@
 from entity.gameP4 import GameP4, gameP4Init
-from entity.player import CurrentPlayers, Player
+from entity.player import CurrentPlayers, Player,configureBotsLevel
 from helpers.colors import *
 from helpers.inputChecker import isDigit
 from entity.winningInformations import *
@@ -10,6 +10,17 @@ from helpers.pointRepartition import pointsDistribution
 from random import randint
 
 def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
+    """
+        Cette fonction détermine les mouvements possibles restants dans le jeu Puissance 4.
+
+        Paramètre :
+            - gameP4 (GameP4) : L'instance du jeu Puissance 4.
+
+        Sortie :
+            - moves (list[tuple[int, int]]) : Une liste de tuples représentant les coordonnées des emplacements
+            où un jeton peut être placé dans le jeu.
+    """
+
     moves  : list[tuple[int,int]]
     isColFinished : bool
     i : int
@@ -29,8 +40,23 @@ def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
 
    
 
-def alignementEnDeux(gameTicTacToe: GameP4, player : Player) -> int:
-    count: int = 0
+def alignInTwo(gameTicTacToe: GameP4, player : Player) -> int:
+    """
+        Cette fonction compte le nombre d'alignements potentiels de deux jetons consécutifs pour un joueur spécifié
+        dans le jeu Tic Tac Toe.
+
+        Paramètres :
+            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - player (Player) : Le joueur dont les alignements potentiels sont comptés.
+
+        Sortie :
+            - count (int) : Le nombre d'alignements potentiels de deux jetons consécutifs.
+    """
+    count: int
+    i : int
+    j : int
+
+    count = 0
 
     # Vérification horizontale
     for i in range(gameTicTacToe.sizeY):
@@ -59,9 +85,21 @@ def alignementEnDeux(gameTicTacToe: GameP4, player : Player) -> int:
     return count
 
 
-def alignementEnTrois(gameTicTacToe : GameP4,player : Player):
+def alignInThree(gameTicTacToe : GameP4,player : Player):
+    """
+        Cette fonction compte le nombre d'alignements potentiels de trois jetons consécutifs pour un joueur spécifié
+        dans le jeu Tic Tac Toe.
 
-    count  : int
+        Paramètres :
+            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - player (Player) : Le joueur dont les alignements potentiels sont comptés.
+
+        Sortie :
+            - count (int) : Le nombre d'alignements potentiels de trois jetons consécutifs.
+    """
+    count : int
+    i: int
+    j : int
 
     count = 0
     # Vérification horizontale
@@ -91,6 +129,17 @@ def alignementEnTrois(gameTicTacToe : GameP4,player : Player):
     return count   
 
 def scoreAlignement(gameTicTacToe : GameP4,player : Player) -> int:
+    """
+        Cette fonction attribue un score total basé sur le nombre d'alignements potentiels de deux et trois jetons consécutifs
+        pour un joueur spécifié dans le jeu Tic Tac Toe.
+
+        Paramètres :
+            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - player (Player) : Le joueur dont les alignements potentiels sont pris en compte.
+
+        Sortie :
+            - score (int) : Le score total attribué en fonction du nombre d'alignements potentiels.
+    """
     scoreAlignementDeux : int
     scoreAlignementTrois : int
 
@@ -98,9 +147,20 @@ def scoreAlignement(gameTicTacToe : GameP4,player : Player) -> int:
     scoreAlignementDeux = 1
     scoreAlignementTrois = 3
 
-    return alignementEnDeux(gameTicTacToe, player) * scoreAlignementDeux + alignementEnTrois(gameTicTacToe, player)  * scoreAlignementTrois
+    return  alignInTwo(gameTicTacToe, player) * scoreAlignementDeux +  alignInThree(gameTicTacToe, player)  * scoreAlignementTrois
 
-def heuristique(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, player2 : bool):
+def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, player2 : bool):
+    """
+        Cette fonction heuristique évalue le plateau de jeu Tic Tac Toe et attribue un score en fonction de la disposition des pions.
+
+        Paramètres :
+            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - isPlayer2 (bool) : Un indicateur indiquant si on évalue le plateau du point de vue du joueur 2.
+
+        Sortie :
+            - result (int) : Le score attribué au plateau en fonction de la disposition des pions.
+    """
     poids : list[list[int]]
     i : int
     j : int
@@ -251,6 +311,21 @@ def play(gameP4: GameP4, column: int, number: int) -> bool:
     return canPlay
 
 def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Player, depth: int, isMaximizing: bool,alpha : float, beta : float) -> int:
+    """
+        Implémente l'algorithme Minimax avec élagage alpha-bêta pour le jeu Puissance 4.
+
+        Args :
+            - gameP4 (GameP4) : L'instance du jeu Puissance 4.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - currentPlayer (Player) : Le joueur pour lequel l'algorithme est en train d'évaluer les mouvements.
+            - depth (int) : La profondeur maximale de recherche dans l'arbre de jeu.
+            - isMaximizing (bool) : Indique si l'algorithme doit maximiser ou minimiser le score.
+            - alpha (float) : La valeur de l'alpha dans l'élagage alpha-bêta.
+            - beta (float) : La valeur du bêta dans l'élagage alpha-bêta.
+
+        Returns :
+        - int : Le score évalué pour le mouvement optimal dans la situation actuelle.
+    """
     if checkWin(gameP4, currentPlayers.player2):
         return 10000
     elif checkWin(gameP4, currentPlayers.player1):
@@ -258,7 +333,7 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
     elif checkDraw(gameP4, currentPlayers.player2) or checkDraw(gameP4, currentPlayers.player1):
         return 0
     elif depth == 0:
-        return heuristique(gameP4,currentPlayers, isMaximizing)
+        return evaluateBoard(gameP4,currentPlayers, isMaximizing)
 
     if isMaximizing:
         max_eval = -10000
@@ -283,7 +358,15 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
                 break
         return min_eval
 
-def botRandomPlay(gameP4 : GameP4,currentPlayer :Player):
+def botRandomPlay(gameP4 : GameP4, currentPlayer :Player) -> None:
+    """
+        Cette fonction permet à un bot de jouer de manière aléatoire dans le jeu Puissance 4.
+
+        Args :
+            - gameP4 (GameP4) : L'instance du jeu Puissance 4.
+            - currentPlayer (Player) : Le joueur actuel, qui est un bot.
+
+    """
     el : int
     nbEls : int 
     moves: list[tuple[int,int]]
@@ -292,12 +375,21 @@ def botRandomPlay(gameP4 : GameP4,currentPlayer :Player):
     moves  = remainingMoves(gameP4)
     nbEls = len(moves)
     if nbEls > 1 : 
-        el = randint(0,nbEls -1)
+        el = randint(0, nbEls -1)
         move = moves[el] 
         gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
         
 
-def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player, depth : int):
+def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player, depth : int) -> None:
+    """
+        Choisi le meilleur coup possible pour un joueur en utilisant l'algorithme Minimax avec élagage alpha-bêta.
+
+        Paramètres :
+            - gameP4 (GameP4) : L'instance du jeu Puissance 4.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - currentPlayer (Player) : Le joueur actuel pour lequel le meilleur coup doit être déterminé.
+            - depth (int) : La profondeur maximale de recherche dans l'arbre de jeu.
+    """
     eval: int
     bestEval : int
     bestMove : tuple[int,int]
@@ -317,7 +409,16 @@ def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Play
 
     gameP4.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
 
-def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player):
+def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Player) -> None:
+    """
+        Cette fonction permet à un bot de jouer au Puissance 4 avec différents niveaux de difficulté.
+        
+        Paramètres :
+            - gameP4 (GameP4) : L'instance du jeu Puissance 4.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - currentPlayer (Player) : Le joueur actuel, qui peut être un bot ou un joueur humain.
+        return  : rien
+    """
     if currentPlayer.isBot:
         if currentPlayer.lvl == 1:
             botRandomPlay(gameP4,currentPlayer)
@@ -402,6 +503,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
         "2. Jouez ensuite à tour de rôle, jusqu’à ce qu’un joueur parvienne à aligner 4 de ses pions horizontalement, verticalement ou en diagonale. ",
         "3. Le premier joueur à aligner 4 de ses pions a gagné !"
     ])
+    configureBotsLevel(currentPlayers)
     print("vous allez joueur sur cette grille")
     displayGrid(gameP4, currentPlayers)
     currentPlayer = currentPlayers.player1
