@@ -65,10 +65,10 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
     moves = remainingMoves(gameTicTacToe)
     if currentPlayer == currentPlayers.player1:
         currentPlayer = currentPlayers.player1
-        opponentPlayer = currentPlayers.player2
+        #opponentPlayer = currentPlayers.player2
     else:
         currentPlayer = currentPlayers.player2
-        opponentPlayer = currentPlayers.player1
+        #opponentPlayer = currentPlayers.player1
 
     # Vérifier s'il y a une possibilité de gagner au prochain coup
     for move in moves:
@@ -79,6 +79,8 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
         gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
 
     # Vérifier s'il y a une possibilité pour l'adversaire de gagner au prochain coup
+    # bot trop fort au niveau 2 s'il peut bloquer
+    """
     if canBlock[0]:
         for move in moves:
             gameTicTacToe.plate[move[0]][move[1]] = opponentPlayer.playerNumber
@@ -87,7 +89,7 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
                 canBlock[0] = not canBlock[0]
                 return move
             gameTicTacToe.plate[move[0]][move[1]] = 0  # Annuler le coup
-
+    """
     # Si aucune possibilité de gagner ou de bloquer, jouer en utilisant les poids
     weights = [
         [5, 3, 5],
@@ -349,7 +351,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
         bestMove = customLevel(gameTicTacToe,currentPlayers,currentPlayer,canBlock)
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
 
-    elif (currentPlayer.lvl == 3 and random > 8) or currentPlayer.lvl == 1:
+    elif (currentPlayer.lvl == 3 and random > 7) or (currentPlayer.lvl == 1):
         print("randomPlay")
         botRandomPlay(gameTicTacToe,currentPlayer)
     elif not first_move:
