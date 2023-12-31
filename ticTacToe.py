@@ -10,7 +10,18 @@ from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from random import randint
 
-def heuristique(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, player2 : bool):
+def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, player2 : bool):
+    """
+        Évalue le plateau de jeu Tic Tac Toe et attribue un score en fonction de la disposition des pions.
+
+        Args :
+            - gameTicTacToe (GameTicTacToe) : L'instance du jeu Tic Tac Toe.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - player2 (bool) : Un indicateur indiquant si on évalue le plateau du point de vue du joueur 2.
+
+        Returns :
+            - result (int) : Le score attribué au plateau en fonction de la disposition des pions.
+    """
     poids : list[list[int]]
     i : int
     j : int
@@ -32,9 +43,25 @@ def heuristique(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, 
                 result -=  poids[i][j]
     return result
 
-def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player, canBlock : list[bool]):
-    moves = remainingMoves(gameTicTacToe)
+def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player, canBlock : list[bool]) -> tuple[int,int]:
+    """
+        Stratégie personnalisée pour le niveau de difficulté du jeu Tic Tac Toe.
 
+        Args :
+            - gameTicTacToe (GameTicTacToe) : L'instance du jeu Tic Tac Toe.
+            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
+            - currentPlayer (Player) : Le joueur actuel (bot).
+            - canBlock (list[bool]) : Un indicateur indiquant si le bot peut bloquer l'adversaire.
+
+        Returns :
+            - bestMove (tuple[int, int]) : Les coordonnées du meilleur coup choisi par le bot.
+    """
+    moves : list[tuple[int,int]]
+    bestWeight : int
+    weight : int
+    bestMove : tuple[int,int]
+
+    moves = remainingMoves(gameTicTacToe)
     if currentPlayer == currentPlayers.player1:
         currentPlayer = currentPlayers.player1
         opponentPlayer = currentPlayers.player2
@@ -81,6 +108,16 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
     return bestMove
 
 def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
+    """
+        Génère une liste des mouvements possibles restants sur le plateau du jeu Tic Tac Toe.
+
+        Args:
+            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
+
+        Returns:
+            - list[tuple[int, int]]: Liste des coordonnées des mouvements possibles restants.
+    """
+
     i : int
     j : int
     tab : list[tuple[int,int]]
@@ -97,7 +134,15 @@ def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
         j = 0
     return tab
 
-def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player):
+def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player) -> None:
+    """
+        Effectue un mouvement aléatoire pour le bot dans le jeu Tic Tac Toe.
+
+        Args:
+            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
+            - currentPlayer (Player): Le joueur actuel (bot).
+
+    """
     el : int
     nbEls : int 
     moves: list[tuple[int,int]]
@@ -217,9 +262,22 @@ def checkDraw(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
     return isDraw
 
 def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPayer : Player, depth: int, isMaxing: bool) -> int:
-    max_eval: float
-    min_eval: float
-    eval: float
+    """
+        Implémente l'algorithme Minimax pour le jeu Tic Tac Toe.
+
+        Args:
+            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
+            - currentPlayers (CurrentPlayers): Les joueurs actuels du jeu.
+            - currentPlayer (Player): Le joueur actuel.
+            - depth (int): La profondeur de recherche dans l'arbre de jeu.
+            - isMaximizing (bool): Un indicateur indiquant si c'est le tour du joueur maximisant.
+
+        Returns:
+            - int: La valeur évaluée pour le meilleur mouvement possible.
+    """
+    max_eval: int
+    min_eval: int
+    eval: int
     
     if checkWin(gameTicTacToe, currentPlayers.player2):
         return 100
@@ -228,7 +286,7 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
     elif checkDraw(gameTicTacToe, currentPlayers.player2) or checkDraw(gameTicTacToe, currentPlayers.player1):
         return 0
     elif depth == 0:
-        return heuristique(gameTicTacToe,currentPlayers, isMaxing)
+        return evaluateBoard(gameTicTacToe,currentPlayers, isMaxing)
 
     if isMaxing:
         max_eval = -10000
@@ -249,7 +307,16 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
             
         return min_eval
 
-def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers, currentPlayer: Player):
+def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers, currentPlayer: Player) -> None:
+    """
+        Choisi le meilleur mouvement pour le joueur actuel dans le jeu Tic Tac Toe en prenant en compte le niveau attribué.
+
+        Args:
+            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
+            - currentPlayers (CurrentPlayers): Les joueurs actuels du jeu.
+            - currentPlayer (Player): Le joueur actuel.
+
+    """
     moves : list[tuple[int,int]]
     eval: float
     first_move : bool
@@ -258,9 +325,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
 
     first_move = False
     canBlock = [True]
-
     moves = list()
-    
 
     moves = remainingMoves(gameTicTacToe)
     bestEval = -10000 if currentPlayer == currentPlayers.player2 else 10000

@@ -13,16 +13,15 @@ def playerInit(player : Player,id : int,name : str,isBot : bool,level: int)->Non
     """
         Initialise un objet joueur avec les informations fournies.
 
-        Cette fonction initialise un objet joueur avec un identifiant, un nom et les scores pour différents jeux.
+        Cette fonction initialise un objet joueur avec un identifiant, un nom, et un niveau.
 
         Args:
-            player (Player): L'objet de joueur à initialiser.
-            id (int): L'identifiant du joueur.
-            name (str): Le nom du joueur.
-         
+            - player (Player): L'objet joueur à initialiser.
+            - id (int): L'identifiant du joueur.
+            - name (str): Le nom du joueur.
+            - isBot (bool): Indique si le joueur est un bot.
+            - level (int): Le niveau du joueur.
 
-        Returns:
-            None
     """
     player.id = id
     player.name = name
@@ -58,6 +57,16 @@ def currentPlayersInit(curentPlayers : CurrentPlayers, player1 : Player, player2
     curentPlayers.player2.playerNumber = 3
 
 def changeBotLevel(player : Player):
+    """
+        Permet à l'utilisateur de configurer le niveau d'un joueur bot.
+
+        Cette fonction vérifie si le joueur est un bot et invite l'utilisateur à configurer son niveau.
+
+        Args:
+            - player (Player): L'objet joueur dont le niveau doit être configuré.
+    """
+    level : str
+
     if player.isBot:
         choice = input(f"Configurer le niveau de {player.name} ? (O/n) ").lower()
         if choice == "o" or choice == "":
@@ -68,6 +77,16 @@ def changeBotLevel(player : Player):
             player.lvl = int(level)
 
 def configureBotsLevel(currentPlayers : CurrentPlayers):
+    """
+        Configure les niveaux des joueurs bots dans l'objet CurrentPlayers.
+
+        Cette fonction itère sur les joueurs dans l'objet CurrentPlayers et configure leurs niveaux s'ils sont des bots.
+
+        Args:
+            - currentPlayers (CurrentPlayers): L'objet CurrentPlayers contenant les joueurs du jeu.
+    """
+    player : Player
+
     for player in [currentPlayers.player1, currentPlayers.player2]:
         changeBotLevel(player)
    

@@ -145,7 +145,7 @@ def scoreAlignement(gameTicTacToe : GameP4,player : Player) -> int:
 
 
     scoreAlignementDeux = 1
-    scoreAlignementTrois = 3
+    scoreAlignementTrois = 4
 
     return  alignInTwo(gameTicTacToe, player) * scoreAlignementDeux +  alignInThree(gameTicTacToe, player)  * scoreAlignementTrois
 
@@ -184,10 +184,10 @@ def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, playe
             elif not player2 and gameTicTacToe.plate[i][j] == currentPlayers.player1.playerNumber :
                 result -=  poids[i][j]
     #essayer de voir les allignements de trois prions, deux pions et 4 pions donner des scores en fonctions 
-    #if player2:
-     #   result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
-    #else:
-     #   result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
+    if player2:
+        result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
+    else:
+        result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
 
     return result
 
@@ -333,10 +333,12 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
     elif checkDraw(gameP4, currentPlayers.player2) or checkDraw(gameP4, currentPlayers.player1):
         return 0
     elif depth == 0:
-        return evaluateBoard(gameP4,currentPlayers, isMaximizing)
+        test=  evaluateBoard(gameP4,currentPlayers, isMaximizing)
+        print(test)
+        return test
 
     if isMaximizing:
-        max_eval = -10000
+        max_eval = -100000
         for move in remainingMoves(gameP4):
             gameP4.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
             eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, False,alpha,beta)
@@ -396,13 +398,11 @@ def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Play
     
     bestMove = remainingMoves(gameP4)[0]
     bestEval = -100000 if currentPlayer == currentPlayers.player2 else 100000
-    print(bestEval)
     for move in remainingMoves(gameP4):
         gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
             
         eval = minimax(gameP4, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1,float("-inf"),float("inf"))
         gameP4.plate[move[0]][move[1]] = 0
-        print(eval,currentPlayer.name)
         if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
             bestEval = eval
             bestMove = move
@@ -429,7 +429,7 @@ def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer :
         elif currentPlayer.lvl == 4:
             bestMove(gameP4,currentPlayers,currentPlayer,3)
         elif currentPlayer.lvl == 5:
-            bestMove(gameP4,currentPlayers,currentPlayer,5)
+            bestMove(gameP4,currentPlayers,currentPlayer,6)
         else:
             print("un problème est survenue")
     
