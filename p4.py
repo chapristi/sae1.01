@@ -31,6 +31,7 @@ def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
         i = gameP4.sizeY - 1
         isColFinished = False
         while i >= 0 and not isColFinished:
+            # si la case contient 0 c'est qu'elle est libre
             if gameP4.plate[i][j] == 0:
                 moves.append((i, j))
                 isColFinished = True
@@ -161,13 +162,13 @@ def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, playe
         Sortie :
             - result (int) : Le score attribué au plateau en fonction de la disposition des pions.
     """
-    poids : list[list[int]]
+    weight : list[list[int]]
     i : int
     j : int
     result : int
 
-
-    poids =[
+    # on fixe le poids de chaques cases
+    weight = [
         [3,4,5,7,5,4,3],
         [4,6,8,10,8,6,4],
         [5,8,11,13,11,8,5],
@@ -180,10 +181,11 @@ def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, playe
     for i in range(0,gameTicTacToe.sizeY -1):
         for j in range(0,gameTicTacToe.sizeY -1):
             if player2 and gameTicTacToe.plate[i][j] == currentPlayers.player2.playerNumber:
-                result +=  poids[i][j]
+                result +=  weight[i][j]
             elif not player2 and gameTicTacToe.plate[i][j] == currentPlayers.player1.playerNumber :
-                result -=  poids[i][j]
-    #essayer de voir les allignements de trois prions, deux pions et 4 pions donner des scores en fonctions 
+                result -=  weight[i][j]
+                
+    #essayer de voir les allignements de trois prions, deux pions et donner des scores en fonction
     if player2:
         result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
     else:
@@ -326,16 +328,20 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
         Returns :
         - int : Le score évalué pour le mouvement optimal dans la situation actuelle.
     """
+    move : tuple[int,int]
+    eval : int
+    min_eval : int
+    max_eval : int
+
     if checkWin(gameP4, currentPlayers.player2):
         return 10000
     elif checkWin(gameP4, currentPlayers.player1):
         return -10000
     elif checkDraw(gameP4, currentPlayers.player2) or checkDraw(gameP4, currentPlayers.player1):
         return 0
+    # si on atteint la profondeur max alors on utilise la fonction heuristique pour évaluer le plateau
     elif depth == 0:
-        test=  evaluateBoard(gameP4,currentPlayers, isMaximizing)
-        print(test)
-        return test
+        return evaluateBoard(gameP4,currentPlayers, isMaximizing)
 
     if isMaximizing:
         max_eval = -100000
@@ -376,6 +382,7 @@ def botRandomPlay(gameP4 : GameP4, currentPlayer :Player) -> None:
 
     moves  = remainingMoves(gameP4)
     nbEls = len(moves)
+    # s'il y a au moins un coup à jouer on le joue
     if nbEls > 1 : 
         el = randint(0, nbEls -1)
         move = moves[el] 
@@ -397,11 +404,14 @@ def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Play
     bestMove : tuple[int,int]
     
     bestMove = remainingMoves(gameP4)[0]
+    # on donne un score qui sera dépacé afin d'attribuer une valeur de départ
     bestEval = -100000 if currentPlayer == currentPlayers.player2 else 100000
     for move in remainingMoves(gameP4):
+        # choix de la case
         gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
-            
+        # la fonction minimax nous renvoie un score pour la case
         eval = minimax(gameP4, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1,float("-inf"),float("inf"))
+        # reinitialisation de la case
         gameP4.plate[move[0]][move[1]] = 0
         if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
             bestEval = eval
@@ -419,6 +429,7 @@ def botLevel2Play(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer :
             - currentPlayer (Player) : Le joueur actuel, qui peut être un bot ou un joueur humain.
         return  : rien
     """
+    # si le joueur est bien un bot
     if currentPlayer.isBot:
         if currentPlayer.lvl == 1:
             botRandomPlay(gameP4,currentPlayer)
@@ -509,7 +520,9 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+currentPlayer.name + ")") + " à toi de jouer")
+        # si le joueur est un bot
         if currentPlayer.isBot:
+            # on demande à l'utilisateur s'il veu changer le niveau du bot
             botLevel2Play(gameP4,currentPlayers,currentPlayer)
             displayGrid(gameP4, currentPlayers)
             if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):

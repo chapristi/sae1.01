@@ -22,13 +22,14 @@ def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers
         Returns :
             - result (int) : Le score attribué au plateau en fonction de la disposition des pions.
     """
-    poids : list[list[int]]
+
+    weight : list[list[int]]
     i : int
     j : int
     result : int
 
-
-    poids = [
+    # on fixe les poids de chaque cases
+    weight = [
         [5,3,5],
         [3,10,3],
         [5,3,5]
@@ -38,9 +39,9 @@ def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers
     for i in range(0,gameTicTacToe.sizeY -1):
         for j in range(0,gameTicTacToe.sizeY -1):
             if player2 and gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
-                result +=  poids[i][j]
+                result +=  weight[i][j]
             elif  not player2 and gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber :
-                result -=  poids[i][j]
+                result -=  weight[i][j]
     return result
 
 def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player, canBlock : list[bool]) -> tuple[int,int]:
@@ -98,6 +99,7 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
     bestWeight = 0
 
     for move in moves:
+        # on destructure move et on met la case 0 dans i la case 1 dans j
         i, j = move
         if gameTicTacToe.plate[i][j] == 0:
             weight = weights[i][j]
@@ -127,6 +129,7 @@ def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
     j = 0
     while i <  gameTicTacToe.sizeY:
         while j < gameTicTacToe.sizeX:
+            # si la case contient 0 c'est qu'elle est libre
             if gameTicTacToe.plate[i][j] == 0 :
                 tab.append((i,j))
             j+=1
@@ -150,8 +153,8 @@ def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player) -> None:
 
     moves  = remainingMoves(gameTicTacToe)
     nbEls = len(moves)
-    if nbEls > 1 : 
-        el = randint(0,nbEls -1)
+    if nbEls > 1 :
+        el = randint(0, nbEls -1)
         move = moves[el] 
         gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
 
@@ -275,9 +278,10 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
         Returns:
             - int: La valeur évaluée pour le meilleur mouvement possible.
     """
-    max_eval: int
-    min_eval: int
-    eval: int
+    move : tuple[int,int]
+    eval : int
+    min_eval : int
+    max_eval : int
     
     if checkWin(gameTicTacToe, currentPlayers.player2):
         return 100
@@ -285,6 +289,7 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
         return -100
     elif checkDraw(gameTicTacToe, currentPlayers.player2) or checkDraw(gameTicTacToe, currentPlayers.player1):
         return 0
+    # si la profondeur atteint 0 on evalue la plateau de jeu avec la fonction heuristique
     elif depth == 0:
         return evaluateBoard(gameTicTacToe,currentPlayers, isMaxing)
 
@@ -360,7 +365,9 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
 
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
     else:
+        # dans certains cas on veut que le bot pour son premier coup joue au milieu s'il commence
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
+        # on met first_move à False pour qu'on ne revienne pas dans cette partie
         first_move = False
 
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:
