@@ -1,6 +1,6 @@
 from sqlite3 import Connection,Cursor,Error as sqliteErr
 from entity.player import Player,playerInit
-
+from typing import Optional
 def register(name : str, password : str, conn : Connection)->Player:
     """
         Enregistre un nouveau joueur dans la base de données avec un nom et un mot de passe.
@@ -18,9 +18,9 @@ def register(name : str, password : str, conn : Connection)->Player:
 
     """
     res : Cursor 
-    cur: Cursor | None
+    cur: Optional[Cursor]
     query : str
-    playerElements : list[str] | None
+    playerElements : Optional[list[str]]
 
     player : Player
     player = Player()
@@ -72,8 +72,8 @@ def connect(name :str, password : str , conn : Connection) -> Player:
     """
     res : Cursor
     query : str
-    cur: Cursor | None
-    playerElements : list[str] | None
+    cur: Optional[Cursor]
+    playerElements : Optional[list[str]]
     player : Player
 
     player = Player()
@@ -122,7 +122,7 @@ def addPoint(id : int, points: int, conn : Connection, game : str)->bool:
         Returns:
             bool: True si l'ajout de points s'est déroulé avec succès, False en cas d'erreur.
     """
-    cur : Cursor | None
+    cur : Optional[Cursor]
     query : str
 
     cur  = None
@@ -162,7 +162,7 @@ def getTopUsersByColumn(collName: str ,conn : Connection) -> list[list[str]]:
                             En cas d'erreur, une liste vide est renvoyée.
     """
     res : Cursor 
-    cur: Cursor | None
+    cur: Optional[Cursor]
     query : str
 
     playersElements : list[list[str]]
