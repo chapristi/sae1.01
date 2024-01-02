@@ -143,7 +143,7 @@ def scoreAlignement(gameP4 : GameP4,player : Player) -> int:
             - score (int) : Le score total attribué en fonction du nombre d'alignements potentiels.
     """
     scoreAlignementTwo : int
-    scoreAlignementTrois : int
+    scoreAlignementThree : int
 
 
     scoreAlignementTwo = 1
