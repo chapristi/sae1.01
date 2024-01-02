@@ -9,6 +9,7 @@ from helpers.startingMenu import displayStartingMenu
 from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
 from random import randint
+import time
 
 def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, player2 : bool):
     """
@@ -36,11 +37,11 @@ def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers
     ]
     result = 0
 
-    for i in range(0,gameTicTacToe.sizeY -1):
-        for j in range(0,gameTicTacToe.sizeY -1):
-            if player2 and gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
+    for i in range(0,gameTicTacToe.sizeY):
+        for j in range(0,gameTicTacToe.sizeX):
+            if gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
                 result +=  weight[i][j]
-            elif  not player2 and gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber :
+            if gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber:
                 result -=  weight[i][j]
     return result
 
@@ -439,6 +440,8 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
     currentPlayer = currentPlayers.player1
     while not finished:
         print(setColorGreen("("+ currentPlayer.name + ")") + " à toi de jouer")
+        # ajout de temps de réponse pour l'experience utilisateur
+        time.sleep(1)
         if currentPlayer.isBot:
             chooseBestMove(gameTicTacToe,currentPlayers,currentPlayer)
             displayGrid(gameTicTacToe, currentPlayers)

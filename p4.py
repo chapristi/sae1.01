@@ -8,6 +8,7 @@ from helpers.helperPlayer import getOtherPlayer
 from helpers.startingMenu import displayStartingMenu
 from helpers.pointRepartition import pointsDistribution
 from random import randint
+import time
 
 def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
     """
@@ -41,13 +42,13 @@ def remainingMoves(gameP4: GameP4) -> list[tuple[int, int]]:
 
    
 
-def alignInTwo(gameTicTacToe: GameP4, player : Player) -> int:
+def alignInTwo(gameP4: GameP4, player : Player) -> int:
     """
         Cette fonction compte le nombre d'alignements potentiels de deux jetons consécutifs pour un joueur spécifié
         dans le jeu Tic Tac Toe.
 
         Paramètres :
-            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - gameP4 (GameP4) : L'instance du jeu Tic Tac Toe.
             - player (Player) : Le joueur dont les alignements potentiels sont comptés.
 
         Sortie :
@@ -60,39 +61,39 @@ def alignInTwo(gameTicTacToe: GameP4, player : Player) -> int:
     count = 0
 
     # Vérification horizontale
-    for i in range(gameTicTacToe.sizeY):
-        for j in range(gameTicTacToe.sizeX - 1):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and gameTicTacToe.plate[i][j + 1] == player.playerNumber:
+    for i in range(gameP4.sizeY):
+        for j in range(gameP4.sizeX - 1):
+            if gameP4.plate[i][j] == player.playerNumber and gameP4.plate[i][j + 1] == player.playerNumber:
                 count += 1
 
     # Vérification verticale
-    for i in range(gameTicTacToe.sizeY - 1):
-        for j in range(gameTicTacToe.sizeX):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j] == player.playerNumber:
+    for i in range(gameP4.sizeY - 1):
+        for j in range(gameP4.sizeX):
+            if gameP4.plate[i][j] == player.playerNumber and  gameP4.plate[i + 1][j] == player.playerNumber:
                 count += 1
 
     # Vérification diagonale (/)
-    for i in range(gameTicTacToe.sizeY - 1):
-        for j in range(gameTicTacToe.sizeX - 1):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j + 1] == player.playerNumber:
+    for i in range(gameP4.sizeY - 1):
+        for j in range(gameP4.sizeX - 1):
+            if gameP4.plate[i][j] == player.playerNumber and  gameP4.plate[i + 1][j + 1] == player.playerNumber:
                 count += 1
 
     # Vérification diagonale (\)
-    for i in range(1, gameTicTacToe.sizeY):
-        for j in range(gameTicTacToe.sizeX - 1):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i - 1][j + 1] == player.playerNumber:
+    for i in range(1, gameP4.sizeY):
+        for j in range(gameP4.sizeX - 1):
+            if gameP4.plate[i][j] == player.playerNumber and  gameP4.plate[i - 1][j + 1] == player.playerNumber:
                 count += 1
 
     return count
 
 
-def alignInThree(gameTicTacToe : GameP4,player : Player):
+def alignInThree(gameP4 : GameP4,player : Player):
     """
         Cette fonction compte le nombre d'alignements potentiels de trois jetons consécutifs pour un joueur spécifié
         dans le jeu Tic Tac Toe.
 
         Paramètres :
-            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - gameP4 (GameP4) : L'instance du jeu Tic Tac Toe.
             - player (Player) : Le joueur dont les alignements potentiels sont comptés.
 
         Sortie :
@@ -104,58 +105,58 @@ def alignInThree(gameTicTacToe : GameP4,player : Player):
 
     count = 0
     # Vérification horizontale
-    for i in range(gameTicTacToe.sizeY):
-        for j in range(gameTicTacToe.sizeX - 2):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i][j + 1] == player.playerNumber and  gameTicTacToe.plate[i][j + 2] == player.playerNumber:
+    for i in range(gameP4.sizeY):
+        for j in range(gameP4.sizeX - 2):
+            if gameP4.plate[i][j] == player.playerNumber and  gameP4.plate[i][j + 1] == player.playerNumber and  gameP4.plate[i][j + 2] == player.playerNumber:
                 count += 1
 
     # Vérification verticale
-    for i in range(gameTicTacToe.sizeY - 2):
-        for j in range(gameTicTacToe.sizeX):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and gameTicTacToe.plate[i + 1][j] == player.playerNumber and  gameTicTacToe.plate[i + 2][j] == player.playerNumber:
+    for i in range(gameP4.sizeY - 2):
+        for j in range(gameP4.sizeX):
+            if gameP4.plate[i][j] == player.playerNumber and gameP4.plate[i + 1][j] == player.playerNumber and  gameP4.plate[i + 2][j] == player.playerNumber:
                 count += 1
 
     # Vérification diagonale (/)
-    for i in range(gameTicTacToe.sizeY - 2):
-        for j in range(gameTicTacToe.sizeX - 2):
-            if gameTicTacToe.plate[i][j] == player.playerNumber and  gameTicTacToe.plate[i + 1][j + 1] == player.playerNumber and  gameTicTacToe.plate[i + 2][j + 2] == player.playerNumber:
+    for i in range(gameP4.sizeY - 2):
+        for j in range(gameP4.sizeX - 2):
+            if gameP4.plate[i][j] == player.playerNumber and  gameP4.plate[i + 1][j + 1] == player.playerNumber and  gameP4.plate[i + 2][j + 2] == player.playerNumber:
                 count += 1
 
     # Vérification diagonale (\)
-    for i in range(1, gameTicTacToe.sizeY - 1):
-        for j in range(gameTicTacToe.sizeX - 2):
-            if gameTicTacToe.plate[i][j] ==  player.playerNumber and gameTicTacToe.plate[i - 1][j + 1] ==  player.playerNumber and gameTicTacToe.plate[i - 2][j + 2] == player.playerNumber:
+    for i in range(1, gameP4.sizeY - 1):
+        for j in range(gameP4.sizeX - 2):
+            if gameP4.plate[i][j] ==  player.playerNumber and gameP4.plate[i - 1][j + 1] ==  player.playerNumber and gameP4.plate[i - 2][j + 2] == player.playerNumber:
                 count += 1
 
     return count   
 
-def scoreAlignement(gameTicTacToe : GameP4,player : Player) -> int:
+def scoreAlignement(gameP4 : GameP4,player : Player) -> int:
     """
         Cette fonction attribue un score total basé sur le nombre d'alignements potentiels de deux et trois jetons consécutifs
         pour un joueur spécifié dans le jeu Tic Tac Toe.
 
         Paramètres :
-            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - gameP4 (GameP4) : L'instance du jeu Tic Tac Toe.
             - player (Player) : Le joueur dont les alignements potentiels sont pris en compte.
 
         Sortie :
             - score (int) : Le score total attribué en fonction du nombre d'alignements potentiels.
     """
-    scoreAlignementDeux : int
+    scoreAlignementTwo : int
     scoreAlignementTrois : int
 
 
-    scoreAlignementDeux = 1
-    scoreAlignementTrois = 4
+    scoreAlignementTwo = 1
+    scoreAlignementThree = 3
 
-    return  alignInTwo(gameTicTacToe, player) * scoreAlignementDeux +  alignInThree(gameTicTacToe, player)  * scoreAlignementTrois
+    return  alignInTwo(gameP4, player) * scoreAlignementTwo +  alignInThree(gameP4, player)  * scoreAlignementThree
 
-def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, player2 : bool):
+def evaluateBoard(gameP4 : GameP4, currentPlayers : CurrentPlayers):
     """
         Cette fonction heuristique évalue le plateau de jeu Tic Tac Toe et attribue un score en fonction de la disposition des pions.
 
         Paramètres :
-            - gameTicTacToe (GameP4) : L'instance du jeu Tic Tac Toe.
+            - gameP4 (GameP4) : L'instance du jeu Tic Tac Toe.
             - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
             - isPlayer2 (bool) : Un indicateur indiquant si on évalue le plateau du point de vue du joueur 2.
 
@@ -169,29 +170,28 @@ def evaluateBoard(gameTicTacToe : GameP4, currentPlayers : CurrentPlayers, playe
 
     # on fixe le poids de chaques cases
     weight = [
-        [3,4,5,7,5,4,3],
-        [4,6,8,10,8,6,4],
-        [5,8,11,13,11,8,5],
-        [5,8,11,13,11,8,5],
-        [4,6,8,10,8,6,4],
-        [3,4,5,7,5,4,3]
+        [3, 4, 5, 7, 5, 4, 3],
+        [4, 6, 8, 10, 8, 6, 4],
+        [5, 8, 11, 13, 11, 8, 5],
+        [5, 8, 11, 13, 11, 8, 5],
+        [4, 6, 8, 10, 8, 6, 4],
+        [3, 4, 5, 7, 5, 4, 3]
     ]
     result = 0
 
-    for i in range(0,gameTicTacToe.sizeY -1):
-        for j in range(0,gameTicTacToe.sizeY -1):
-            if player2 and gameTicTacToe.plate[i][j] == currentPlayers.player2.playerNumber:
+    for i in range(0,gameP4.sizeY):
+        for j in range(0,gameP4.sizeX):
+            if gameP4.plate[i][j] == currentPlayers.player2.playerNumber:
                 result +=  weight[i][j]
-            elif not player2 and gameTicTacToe.plate[i][j] == currentPlayers.player1.playerNumber :
+            elif gameP4.plate[i][j] == currentPlayers.player1.playerNumber:
                 result -=  weight[i][j]
-                
-    #essayer de voir les allignements de trois prions, deux pions et donner des scores en fonction
-    if player2:
-        result += scoreAlignement(gameTicTacToe,currentPlayers.player2)
-    else:
-        result -= scoreAlignement(gameTicTacToe,currentPlayers.player1)
 
+    #essayer de voir les allignements de trois prions, deux pions et donner des scores en fonction
+ 
+    result += scoreAlignement(gameP4,currentPlayers.player2)
+    result -= scoreAlignement(gameP4,currentPlayers.player1)
     return result
+    
 
 def checkWin(gameP4: GameP4, currentPlayer: Player) -> bool:
     """
@@ -341,13 +341,13 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
         return 0
     # si on atteint la profondeur max alors on utilise la fonction heuristique pour évaluer le plateau
     elif depth == 0:
-        return evaluateBoard(gameP4,currentPlayers, isMaximizing)
+        return evaluateBoard(gameP4,currentPlayers)
 
     if isMaximizing:
-        max_eval = -100000
+        max_eval = -1000000
         for move in remainingMoves(gameP4):
             gameP4.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
-            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, False,alpha,beta)
+            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, not isMaximizing ,alpha,beta)
             gameP4.plate[move[0]][move[1]] = 0
             max_eval = max(max_eval, eval)
             alpha = max(alpha, eval)
@@ -355,10 +355,10 @@ def minimax(gameP4: GameP4, currentPlayers: CurrentPlayers, currentPlayer: Playe
                 break
         return max_eval
     else:
-        min_eval = 100000
+        min_eval = 1000000
         for move in remainingMoves(gameP4):
             gameP4.plate[move[0]][move[1]] = currentPlayers.player1.playerNumber
-            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, True,alpha,beta)
+            eval = minimax(gameP4, currentPlayers, currentPlayer, depth - 1, not isMaximizing ,alpha,beta)
             gameP4.plate[move[0]][move[1]] = 0
             min_eval = min(min_eval, eval)
             beta = min(beta, eval)
@@ -405,7 +405,7 @@ def bestMove(gameP4: GameP4, currentPlayers: CurrentPlayers,currentPlayer : Play
     
     bestMove = remainingMoves(gameP4)[0]
     # on donne un score qui sera dépacé afin d'attribuer une valeur de départ
-    bestEval = -100000 if currentPlayer == currentPlayers.player2 else 100000
+    bestEval = -1000000 if currentPlayer == currentPlayers.player2 else 1000000
     for move in remainingMoves(gameP4):
         # choix de la case
         gameP4.plate[move[0]][move[1]] = currentPlayer.playerNumber
@@ -524,6 +524,7 @@ def game(currentPlayers: CurrentPlayers, conn: Connection) -> None:
         if currentPlayer.isBot:
             # on demande à l'utilisateur s'il veu changer le niveau du bot
             botLevel2Play(gameP4,currentPlayers,currentPlayer)
+            time.sleep(1)
             displayGrid(gameP4, currentPlayers)
             if checkWin(gameP4, currentPlayer) or checkDraw(gameP4, currentPlayer):
                 finished = True
