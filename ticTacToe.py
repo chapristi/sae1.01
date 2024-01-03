@@ -8,42 +8,9 @@ from helpers.helperPlayer import getOtherPlayer
 from helpers.startingMenu import displayStartingMenu
 from helpers.pointRepartition import pointsDistribution
 from entity.winningInformations import *
-from random import randint
 import time
+from botLogic.botTTT import *
 
-def evaluateBoard(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers, player2 : bool):
-    """
-        Évalue le plateau de jeu Tic Tac Toe et attribue un score en fonction de la disposition des pions.
-
-        Args :
-            - gameTicTacToe (GameTicTacToe) : L'instance du jeu Tic Tac Toe.
-            - currentPlayers (CurrentPlayers) : Les joueurs actuels du jeu.
-            - player2 (bool) : Un indicateur indiquant si on évalue le plateau du point de vue du joueur 2.
-
-        Returns :
-            - result (int) : Le score attribué au plateau en fonction de la disposition des pions.
-    """
-
-    weight : list[list[int]]
-    i : int
-    j : int
-    result : int
-
-    # on fixe les poids de chaque cases
-    weight = [
-        [5,3,5],
-        [3,10,3],
-        [5,3,5]
-    ]
-    result = 0
-
-    for i in range(0,gameTicTacToe.sizeY):
-        for j in range(0,gameTicTacToe.sizeX):
-            if gameTicTacToe.plate[i][j] == currentPLayers.player2.playerNumber:
-                result +=  weight[i][j]
-            if gameTicTacToe.plate[i][j] == currentPLayers.player1.playerNumber:
-                result -=  weight[i][j]
-    return result
 
 def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPlayer: Player, canBlock : list[bool]) -> tuple[int,int]:
     """
@@ -112,54 +79,7 @@ def customLevel(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,cur
 
     return bestMove
 
-def remainingMoves(gameTicTacToe : GameTicTacToe) -> list[tuple[int,int]]:
-    """
-        Génère une liste des mouvements possibles restants sur le plateau du jeu Tic Tac Toe.
 
-        Args:
-            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
-
-        Returns:
-            - list[tuple[int, int]]: Liste des coordonnées des mouvements possibles restants.
-    """
-
-    i : int
-    j : int
-    tab : list[tuple[int,int]]
-
-    tab = list()
-    i = 0
-    j = 0
-    while i <  gameTicTacToe.sizeY:
-        while j < gameTicTacToe.sizeX:
-            # si la case contient 0 c'est qu'elle est libre
-            if gameTicTacToe.plate[i][j] == 0 :
-                tab.append((i,j))
-            j+=1
-        i+=1
-        j = 0
-    return tab
-
-def botRandomPlay(gameTicTacToe : GameTicTacToe,currentPlayer :Player) -> None:
-    """
-        Effectue un mouvement aléatoire pour le bot dans le jeu Tic Tac Toe.
-
-        Args:
-            - gameTicTacToe (GameTicTacToe): L'instance du jeu Tic Tac Toe.
-            - currentPlayer (Player): Le joueur actuel (bot).
-
-    """
-    el : int
-    nbEls : int 
-    moves: list[tuple[int,int]]
-    move : tuple[int,int]
-
-    moves  = remainingMoves(gameTicTacToe)
-    nbEls = len(moves)
-    if nbEls > 1 :
-        el = randint(0, nbEls -1)
-        move = moves[el] 
-        gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
 
 def displayGrid(gameTicTacToe : GameTicTacToe, currentPLayers : CurrentPlayers)->None:
     """
@@ -267,7 +187,8 @@ def checkDraw(gameTicTacToe : GameTicTacToe, currentPlayer : Player)->bool:
         j = 0
     return isDraw
 
-def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPayer : Player, depth: int, isMaxing: bool) -> int:
+
+def minimaxAlphaBeta(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,currentPayer : Player, depth: int, isMaxing: bool,alpha : float, beta : float) -> int:
     """
         Implémente l'algorithme Minimax pour le jeu Tic Tac Toe.
 
@@ -285,6 +206,13 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
     eval : int
     min_eval : int
     max_eval : int
+    moves : list[tuple[int,int]]
+    i : int
+    j : int
+
+    i = 0
+    j = 0
+    moves = remainingMoves(gameTicTacToe)
     
     if checkWin(gameTicTacToe, currentPlayers.player2):
         return 100
@@ -298,22 +226,29 @@ def minimax(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,current
 
     if isMaxing:
         max_eval = -10000
-        for move in remainingMoves(gameTicTacToe):
+        while i < len(moves) and beta > alpha:
+            move = moves[i]
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player2.playerNumber
-            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing)
+            eval = minimaxAlphaBeta(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing,alpha , beta )
             max_eval = max(max_eval, eval)
+            alpha = max(alpha, eval)
             gameTicTacToe.plate[move[0]][move[1]] = 0
+            i = i + 1
     
         return max_eval
     else:
         min_eval = 10000
-        for move in remainingMoves(gameTicTacToe):
+        while j < len(moves) and beta > alpha:
+            move = moves[j]
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayers.player1.playerNumber
-            eval = minimax(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing)
+            eval = minimaxAlphaBeta(gameTicTacToe, currentPlayers,currentPayer, depth - 1, not isMaxing,alpha , beta )
             min_eval = min(min_eval, eval)
+            beta = min(beta, eval)
             gameTicTacToe.plate[move[0]][move[1]] = 0
+            j = j+1
             
         return min_eval
+
 
 def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers, currentPlayer: Player) -> None:
     """
@@ -355,11 +290,12 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
     elif (currentPlayer.lvl == 3 and random > 7) or (currentPlayer.lvl == 1):
         print("randomPlay")
         botRandomPlay(gameTicTacToe,currentPlayer)
+    
     elif not first_move:
         for move in remainingMoves(gameTicTacToe):
             gameTicTacToe.plate[move[0]][move[1]] = currentPlayer.playerNumber
-            
-            eval = minimax(gameTicTacToe, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1)
+
+            eval = minimaxAlphaBeta(gameTicTacToe, currentPlayers,currentPlayer, depth, currentPlayer == currentPlayers.player1,float("-inf"),float("inf"))
             gameTicTacToe.plate[move[0]][move[1]] = 0
 
             if (currentPlayer == currentPlayers.player2 and eval > bestEval) or (currentPlayer == currentPlayers.player1 and eval < bestEval):
@@ -371,8 +307,7 @@ def chooseBestMove(gameTicTacToe: GameTicTacToe, currentPlayers: CurrentPlayers,
         # dans certains cas on veut que le bot pour son premier coup joue au milieu s'il commence
         gameTicTacToe.plate[bestMove[0]][bestMove[1]] = currentPlayer.playerNumber
         # on met first_move à False pour qu'on ne revienne pas dans cette partie
-        first_move = False
-
+        first_move = False   
 def play(gameTicTacToe : GameTicTacToe,currentPlayer : Player, choiceX:int,choiceY:int)->bool:
     """
         Joue un coup sur le plateau de jeu.
@@ -438,10 +373,11 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
 
     displayGrid(gameTicTacToe,currentPlayers)
     currentPlayer = currentPlayers.player1
+    #temps_debut = time.time()
     while not finished:
         print(setColorGreen("("+ currentPlayer.name + ")") + " à toi de jouer")
         # ajout de temps de réponse pour l'experience utilisateur
-        time.sleep(1)
+        time.sleep(3)
         if currentPlayer.isBot:
             chooseBestMove(gameTicTacToe,currentPlayers,currentPlayer)
             displayGrid(gameTicTacToe, currentPlayers)
@@ -467,5 +403,11 @@ def game(currentPlayers : CurrentPlayers, conn : Connection)->None:
                     finished = True
                 else:
                     currentPlayer = getOtherPlayer(currentPlayers,currentPlayer)
+    #temps_fin = time.time()
+    #temps_execution = temps_fin - temps_debut
+
+    # Affichez le résultat
+    #print(f"Le programme a pris {temps_execution} secondes pour s'exécuter.")
+
     winningInformationsInit(winningInformations, gameTicTacToe.colName,gameTicTacToe.pointDraw,gameTicTacToe.pointWin,gameTicTacToe.pointLoose,checkDraw(gameTicTacToe,currentPlayer))
     pointsDistribution(winningInformations,currentPlayers,currentPlayer,conn)    

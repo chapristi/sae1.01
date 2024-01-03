@@ -70,10 +70,10 @@ def changeBotLevel(player : Player):
     if player.isBot:
         choice = input(f"Configurer le niveau de {player.name} ? (O/n) ").lower()
         if choice == "o" or choice == "":
-            level = input("Entrez le niveau (1 à 5): ")
-            while not isDigit(level) or not (1 <= int(level) <= 5):
-                print("Niveau invalide. Veuillez entrer un nombre entre 1 et 5.")
-                level = input("Entrez le niveau (1 à 5): ")
+            level = input("Entrez le niveau (1 à 6): ")
+            while not isDigit(level) or not (1 <= int(level) <= 6):
+                print("Niveau invalide. Veuillez entrer un nombre entre 1 et 6.")
+                level = input("Entrez le niveau (1 à 6): ")
             player.lvl = int(level)
 
 def configureBotsLevel(currentPlayers : CurrentPlayers):
